@@ -1,4 +1,4 @@
-package com.github.ihsg.library;
+package com.github.ihsg.demo;
 
 import org.junit.Test;
 

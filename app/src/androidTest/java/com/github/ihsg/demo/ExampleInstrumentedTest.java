@@ -1,4 +1,4 @@
-package com.github.ihsg.patternlocker;
+package com.github.ihsg.demo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
