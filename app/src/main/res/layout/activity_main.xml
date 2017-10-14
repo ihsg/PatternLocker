@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.github.ihsg.demo.MainActivity">
 
-    <com.github.ihsg.patternlocker.PatternIndicatorView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center" />
+    <android.support.v7.widget.Toolbar
+        style="@style/AppTheme.Toolbar"
+        app:title="@string/app_name" />
 
-    <com.github.ihsg.patternlocker.PatternLockerView
+    <Button
+        android:id="@+id/btn_setting"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="60dp" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/title_pattern_setting" />
+
+    <Button
+        android:id="@+id/btn_checking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_setting"
+        android:text="@string/title_pattern_checking" />
+
+</RelativeLayout>

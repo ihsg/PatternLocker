@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,11 +17,14 @@ import java.util.List;
  */
 
 public class PatternLockerView extends View {
-    private List<CellBean> cellBeanList;
-    private Paint paint;
-    private ResultState resultState;
     private float endX;
     private float endY;
+    private int hitSize;
+    private Paint paint;
+    private ResultState resultState;
+    private List<CellBean> cellBeanList;
+    private List<Integer> hitList;
+    private OnPatternChangeListener listener;
 
     public PatternLockerView(Context context) {
         this(context, null);
@@ -35,6 +39,22 @@ public class PatternLockerView extends View {
         this.init(context, attrs, defStyleAttr);
     }
 
+    public void setResultState(ResultState resultState) {
+        this.resultState = resultState;
+    }
+
+    public void setOnPatternChangedListener(OnPatternChangeListener listener) {
+        this.listener = listener;
+    }
+
+    public void clearHitState() {
+        clearHitData();
+        if (this.listener != null) {
+            this.listener.onClear(this);
+        }
+        postInvalidate();
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int a = Math.min(widthMeasureSpec, heightMeasureSpec);
@@ -47,13 +67,16 @@ public class PatternLockerView extends View {
         if (this.cellBeanList == null) {
             this.cellBeanList = new CellFactory(getWidth(), getHeight()).getCellBeanList();
         }
-        this.resultState = ManagerCenter.getInstance().getResultState();
         drawLine(canvas);
         drawCircles(canvas);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!isEnabled()) {
+            return super.onTouchEvent(event);
+        }
+
         boolean isHandle = false;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -81,13 +104,13 @@ public class PatternLockerView extends View {
         this.paint.setAntiAlias(true);
         this.paint.setStrokeJoin(Paint.Join.ROUND);
         this.paint.setStrokeCap(Paint.Cap.ROUND);
-        this.paint.setColor(Config.getDefaultColor());
         this.paint.setStrokeWidth(Config.getLineWidth(getResources()));
+
+        this.hitList = new ArrayList<>();
     }
 
     private void drawLine(Canvas canvas) {
-        List<Integer> hitList = ManagerCenter.getInstance().getHitList();
-        if (!hitList.isEmpty()) {
+        if (!this.hitList.isEmpty()) {
             Path path = new Path();
             CellBean first = this.cellBeanList.get(hitList.get(0));
             path.moveTo(first.x, first.y);
@@ -129,34 +152,44 @@ public class PatternLockerView extends View {
     }
 
     private void handleActionDown(MotionEvent event) {
-        //1. clear pre state
-        List<Integer> hitList = ManagerCenter.getInstance().getHitList();
-        for (int i = 0; i < hitList.size(); i++) {
-            this.cellBeanList.get(hitList.get(i)).isHit = false;
-        }
-        ManagerCenter.getInstance().clearHit();
-        ManagerCenter.getInstance().setResultState(ResultState.OK);
+        //1. reset to default state
+        clearHitData();
 
         //2. update hit state
         updateHitState(event);
+
+        //3. notify listener
+        if (this.listener != null) {
+            this.listener.onStart(this);
+        }
     }
 
     private void handleActionMove(MotionEvent event) {
-        //1. update hit resultState
+        //1. update hit state
         updateHitState(event);
 
         //2. update end point
         this.endX = event.getX();
         this.endY = event.getY();
+
+        //3. notify listener if needed
+        final int size = this.hitList.size();
+        if ((this.listener != null) && (this.hitSize != size)) {
+            this.hitSize = size;
+            this.listener.onChange(this, this.hitList);
+        }
     }
 
     private void handleActionUp(MotionEvent event) {
-        //1. update hit resultState
+        //1. update hit state
         updateHitState(event);
         this.endX = 0;
         this.endY = 0;
-        //2. check result
-        ManagerCenter.getInstance().checkResult();
+
+        //2. notify listener
+        if (this.listener != null) {
+            this.listener.onComplete(this, this.hitList);
+        }
     }
 
     private void updateHitState(MotionEvent event) {
@@ -165,8 +198,17 @@ public class PatternLockerView extends View {
         for (CellBean c : this.cellBeanList) {
             if (!c.isHit && c.of(x, y)) {
                 c.isHit = true;
-                ManagerCenter.getInstance().addHit(c.id);
+                this.hitList.add(c.id);
             }
         }
+    }
+
+    private void clearHitData() {
+        this.resultState = ResultState.OK;
+        for (int i = 0; i < this.hitList.size(); i++) {
+            this.cellBeanList.get(hitList.get(i)).isHit = false;
+        }
+        this.hitList.clear();
+        this.hitSize = 0;
     }
 }

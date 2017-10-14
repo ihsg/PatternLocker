@@ -7,7 +7,7 @@ import java.util.List;
  * Created by hsg on 20/09/2017.
  */
 
-public class CellFactory {
+class CellFactory {
     private int width;
     private int height;
     private List<CellBean> cellBeanList;

@@ -8,17 +8,18 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by hsg on 20/09/2017.
  */
 
-public class PatternIndicatorView extends View implements ManagerCenter.ChangeListener {
-
+public class PatternIndicatorView extends View {
     private Paint paint;
-    private List<CellBean> cellBeanList;
     private ResultState resultState;
+    private List<Integer> hitList;
+    private List<CellBean> cellBeanList;
 
     public PatternIndicatorView(Context context) {
         this(context, null);
@@ -33,6 +34,32 @@ public class PatternIndicatorView extends View implements ManagerCenter.ChangeLi
         init(context, attrs, defStyleAttr);
     }
 
+    public void updateState(List<Integer> hitList, ResultState resultState) {
+        //1. reset to default state
+        if (!this.hitList.isEmpty()) {
+            for (int i : this.hitList) {
+                this.cellBeanList.get(i).isHit = false;
+            }
+            this.hitList.clear();
+        }
+
+        //2. update hit state
+        if (hitList != null) {
+            this.hitList.addAll(hitList);
+        }
+        if (!this.hitList.isEmpty()) {
+            for (int i : this.hitList) {
+                this.cellBeanList.get(i).isHit = true;
+            }
+        }
+
+        //3. update result
+        this.resultState = resultState;
+
+        //4. update view
+        postInvalidate();
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int a = Math.min(widthMeasureSpec, heightMeasureSpec);
@@ -45,7 +72,6 @@ public class PatternIndicatorView extends View implements ManagerCenter.ChangeLi
         if (this.cellBeanList == null) {
             this.cellBeanList = new CellFactory(getWidth(), getHeight()).getCellBeanList();
         }
-        this.resultState = ManagerCenter.getInstance().getResultState();
         drawLine(canvas);
         drawCircles(canvas);
     }
@@ -54,12 +80,12 @@ public class PatternIndicatorView extends View implements ManagerCenter.ChangeLi
         this.paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         this.paint.setColor(Config.getDefaultColor());
         this.paint.setStrokeWidth(Config.getLineWidth(getResources()) / 2f);
-        ManagerCenter.getInstance().setChangeListener(this);
+
+        this.hitList = new ArrayList<>();
     }
 
     private void drawLine(Canvas canvas) {
-        List<Integer> hitList = ManagerCenter.getInstance().getHitList();
-        if (!hitList.isEmpty()) {
+        if (!this.hitList.isEmpty()) {
             Path path = new Path();
             CellBean first = this.cellBeanList.get(hitList.get(0));
             path.moveTo(first.x, first.y);
@@ -87,23 +113,5 @@ public class PatternIndicatorView extends View implements ManagerCenter.ChangeLi
                 canvas.drawCircle(item.x, item.y, item.radius - this.paint.getStrokeWidth() / 2f, paint);
             }
         }
-    }
-
-    private void updateHitState() {
-        for (CellBean c : this.cellBeanList) {
-            c.isHit = false;
-        }
-        List<Integer> hitList = ManagerCenter.getInstance().getHitList();
-        if (!hitList.isEmpty()) {
-            for (int i : hitList) {
-                this.cellBeanList.get(i).isHit = true;
-            }
-        }
-    }
-
-    @Override
-    public void onChanged() {
-        updateHitState();
-        postInvalidate();
     }
 }

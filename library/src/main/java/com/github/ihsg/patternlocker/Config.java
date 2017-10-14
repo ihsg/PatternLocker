@@ -7,14 +7,12 @@ import android.util.TypedValue;
 /**
  * Created by hsg on 23/09/2017.
  */
-
-public class Config {
+class Config {
     private static final String DEFAULT_COLOR = "#2196F3";
     private static final String DEFAULT_HIT_COLOR = "#3F51B5";
     private static final String DEFAULT_ERROR_COLOR = "#F44336";
     private static final String DEFAULT_FILL_COLOR = "#FAFAFA";
     private static final int LINE_WIDTH = 1;
-
 
     public static int getDefaultColor() {
         return Color.parseColor(DEFAULT_COLOR);
@@ -33,7 +31,7 @@ public class Config {
     }
 
     public static int getColorByState(ResultState resultState) {
-        return ManagerCenter.getInstance().getResultState() == ResultState.OK ? getHitColor() : getErrorColor();
+        return resultState == ResultState.OK ? getHitColor() : getErrorColor();
     }
 
     public static float getLineWidth(Resources resources) {

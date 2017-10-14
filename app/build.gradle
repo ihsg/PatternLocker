@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
-        applicationId "com.github.ihsg.patternlocker"
+        applicationId "com.github.ihsg.patternlocker.demo"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1

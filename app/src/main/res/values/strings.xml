@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">PatternLocker</string>
+    <string name="app_name">手势解锁demo</string>
+    <string name="title_pattern_setting">设置手势密码</string>
+    <string name="title_pattern_checking">验证手势密码</string>
 </resources>
