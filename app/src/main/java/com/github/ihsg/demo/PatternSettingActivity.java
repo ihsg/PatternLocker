@@ -18,6 +18,7 @@ public class PatternSettingActivity extends AppCompatActivity {
     private PatternLockerView patternLockerView;
     private PatternIndicatorView patternIndicatorView;
     private TextView textMsg;
+    private PatternHelper patternHelper;
 
     public static void startAction(Context context) {
         Intent intent = new Intent(context, PatternSettingActivity.class);
@@ -50,42 +51,33 @@ public class PatternSettingActivity extends AppCompatActivity {
                 view.setResultState(resultState);
                 patternIndicatorView.updateState(hitList, resultState);
                 updateMsg();
-                startTimer();
             }
 
             @Override
             public void onClear(PatternLockerView view) {
 //                patternIndicatorView.updateState(null, ResultState.OK);
+                finishIfNeeded();
             }
         });
 
         this.textMsg.setText("设置解锁图案");
+        this.patternHelper = new PatternHelper();
     }
 
     private boolean isPatternOk(List<Integer> hitList) {
-        PatternUtil.getInstance().validateForSetting(hitList);
-        return PatternUtil.getInstance().isOk();
+        this.patternHelper.validateForSetting(hitList);
+        return this.patternHelper.isOk();
     }
 
     private void updateMsg() {
-        this.textMsg.setText(PatternUtil.getInstance().getMessage());
-        this.textMsg.setTextColor(PatternUtil.getInstance().isOk() ? getResources().getColor(R.color.colorPrimary) : getResources().getColor(R.color.colorAccent));
-    }
-
-    private void startTimer() {
-        this.patternLockerView.setEnabled(false);
-        this.patternLockerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                patternLockerView.clearHitState();
-                patternLockerView.setEnabled(true);
-                finishIfNeeded();
-            }
-        }, 1000);
+        this.textMsg.setText(this.patternHelper.getMessage());
+        this.textMsg.setTextColor(this.patternHelper.isOk() ?
+                getResources().getColor(R.color.colorPrimary) :
+                getResources().getColor(R.color.colorAccent));
     }
 
     private void finishIfNeeded() {
-        if (PatternUtil.getInstance().isFinish()) {
+        if (this.patternHelper.isFinish()) {
             finish();
         }
     }

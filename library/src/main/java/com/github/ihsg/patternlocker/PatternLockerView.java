@@ -190,6 +190,11 @@ public class PatternLockerView extends View {
         if (this.listener != null) {
             this.listener.onComplete(this, this.hitList);
         }
+
+        //3. startTimer if needed
+        if (this.hitList.size() > 0) {
+            startTimer();
+        }
     }
 
     private void updateHitState(MotionEvent event) {
@@ -210,5 +215,16 @@ public class PatternLockerView extends View {
         }
         this.hitList.clear();
         this.hitSize = 0;
+    }
+
+    private void startTimer() {
+        setEnabled(false);
+        this.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setEnabled(true);
+                clearHitState();
+            }
+        }, Config.getDelayTime());
     }
 }

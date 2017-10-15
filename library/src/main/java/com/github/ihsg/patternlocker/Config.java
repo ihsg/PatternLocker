@@ -13,6 +13,7 @@ class Config {
     private static final String DEFAULT_ERROR_COLOR = "#F44336";
     private static final String DEFAULT_FILL_COLOR = "#FAFAFA";
     private static final int LINE_WIDTH = 1;
+    private static final int DELAY_TIME = 1000;//ms
 
     public static int getDefaultColor() {
         return Color.parseColor(DEFAULT_COLOR);
@@ -36,6 +37,10 @@ class Config {
 
     public static float getLineWidth(Resources resources) {
         return convertPx2Dp(LINE_WIDTH, resources);
+    }
+
+    public static int getDelayTime() {
+        return DELAY_TIME;
     }
 
     private static float convertPx2Dp(float px, Resources resources) {

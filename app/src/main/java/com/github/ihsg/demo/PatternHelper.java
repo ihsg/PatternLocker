@@ -8,12 +8,11 @@ import java.util.List;
  * Created by hsg on 14/10/2017.
  */
 
-public class PatternUtil {
+public class PatternHelper {
     public static final int MAX_SIZE = 4;
     public static final int MAX_TIMES = 5;
     private static final String GESTURE_PWD_KEY = "gesture_pwd_key";
 
-    private static PatternUtil instance;
     private String message;
     private String storagePwd;
     private String tmpPwd;
@@ -21,22 +20,11 @@ public class PatternUtil {
     private boolean isFinish;
     private boolean isOk;
 
-    public static PatternUtil getInstance() {
-        if (instance == null) {
-            synchronized (PatternUtil.class) {
-                if (instance == null) {
-                    instance = new PatternUtil();
-                }
-            }
-        }
-        return instance;
-    }
-
     public void validateForSetting(List<Integer> hitList) {
         this.isFinish = false;
         this.isOk = false;
 
-        if (hitList == null || hitList.size() < MAX_SIZE) {
+        if ((hitList == null) || (hitList.size() < MAX_SIZE)) {
             this.tmpPwd = null;
             this.message = getSizeErrorMsg();
             return;
@@ -64,10 +52,10 @@ public class PatternUtil {
 
     public void validateForChecking(List<Integer> hitList) {
         this.isOk = false;
-        this.isFinish = false;
 
-        if (hitList == null || hitList.size() < MAX_SIZE) {
+        if ((hitList == null) || (hitList.size() < MAX_SIZE)) {
             this.times++;
+            this.isFinish = this.times >= MAX_SIZE;
             this.message = getPwdErrorMsg();
             return;
         }
@@ -79,6 +67,7 @@ public class PatternUtil {
             this.isFinish = true;
         } else {
             this.times++;
+            this.isFinish = this.times >= MAX_SIZE;
             this.message = getPwdErrorMsg();
         }
     }
