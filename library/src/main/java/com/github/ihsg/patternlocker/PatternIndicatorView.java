@@ -1,6 +1,7 @@
 package com.github.ihsg.patternlocker;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -16,6 +17,11 @@ import java.util.List;
  */
 
 public class PatternIndicatorView extends View {
+    private int color;
+    private int hitColor;
+    private int errorColor;
+    private float lineWidth;
+
     private Paint paint;
     private ResultState resultState;
     private List<Integer> hitList;
@@ -32,6 +38,42 @@ public class PatternIndicatorView extends View {
     public PatternIndicatorView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs, defStyleAttr);
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+        postInvalidate();
+    }
+
+    public int getHitColor() {
+        return hitColor;
+    }
+
+    public void setHitColor(int hitColor) {
+        this.hitColor = hitColor;
+        postInvalidate();
+    }
+
+    public int getErrorColor() {
+        return errorColor;
+    }
+
+    public void setErrorColor(int errorColor) {
+        this.errorColor = errorColor;
+        postInvalidate();
+    }
+
+    public float getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(float lineWidth) {
+        this.lineWidth = lineWidth;
+        postInvalidate();
     }
 
     public void updateState(List<Integer> hitList, ResultState resultState) {
@@ -77,9 +119,33 @@ public class PatternIndicatorView extends View {
     }
 
     private void init(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this.paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.paint.setColor(Config.getDefaultColor());
-        this.paint.setStrokeWidth(Config.getLineWidth(getResources()) / 2f);
+        this.initAttrs(context, attrs, defStyleAttr);
+        this.initData();
+    }
+
+    private void initAttrs(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.PatternIndicatorView, defStyleAttr, 0);
+
+        this.color = ta.getColor(R.styleable.PatternIndicatorView_piv_color, Config.getDefaultColor());
+        this.hitColor = ta.getColor(R.styleable.PatternIndicatorView_piv_hitColor, Config.getHitColor());
+        this.errorColor = ta.getColor(R.styleable.PatternIndicatorView_piv_errorColor, Config.getErrorColor());
+        this.lineWidth = ta.getDimension(R.styleable.PatternIndicatorView_piv_lineWidth, Config.getLineWidth(getResources()));
+
+        ta.recycle();
+
+        this.setColor(this.color);
+        this.setHitColor(this.hitColor);
+        this.setErrorColor(this.errorColor);
+        this.setLineWidth(this.lineWidth);
+    }
+
+    private void initData() {
+        this.paint = new Paint();
+        this.paint.setDither(true);
+        this.paint.setAntiAlias(true);
+        this.paint.setStrokeJoin(Paint.Join.ROUND);
+        this.paint.setStrokeCap(Paint.Cap.ROUND);
+        this.paint.setStrokeWidth(this.lineWidth);
 
         this.hitList = new ArrayList<>();
     }
@@ -94,7 +160,7 @@ public class PatternIndicatorView extends View {
                 path.lineTo(c.x, c.y);
             }
 
-            this.paint.setColor(Config.getColorByState(this.resultState));
+            this.paint.setColor(this.getColorByState(this.resultState));
             this.paint.setStyle(Paint.Style.STROKE);
             canvas.drawPath(path, this.paint);
         }
@@ -104,14 +170,18 @@ public class PatternIndicatorView extends View {
         for (int i = 0; i < this.cellBeanList.size(); i++) {
             CellBean item = this.cellBeanList.get(i);
             if (item.isHit) {
-                this.paint.setColor(Config.getColorByState(this.resultState));
+                this.paint.setColor(this.getColorByState(this.resultState));
                 this.paint.setStyle(Paint.Style.FILL);
                 canvas.drawCircle(item.x, item.y, item.radius - this.paint.getStrokeWidth() / 2f, paint);
             } else {
-                this.paint.setColor(Config.getDefaultColor());
+                this.paint.setColor(this.color);
                 this.paint.setStyle(Paint.Style.STROKE);
                 canvas.drawCircle(item.x, item.y, item.radius - this.paint.getStrokeWidth() / 2f, paint);
             }
         }
+    }
+
+    private int getColorByState(ResultState state) {
+        return state == ResultState.OK ? this.hitColor : this.errorColor;
     }
 }

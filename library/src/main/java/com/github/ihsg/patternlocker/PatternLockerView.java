@@ -1,6 +1,7 @@
 package com.github.ihsg.patternlocker;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -17,6 +18,12 @@ import java.util.List;
  */
 
 public class PatternLockerView extends View {
+    private int color;
+    private int hitColor;
+    private int errorColor;
+    private int fillColor;
+    private float lineWidth;
+
     private float endX;
     private float endY;
     private int hitSize;
@@ -52,6 +59,51 @@ public class PatternLockerView extends View {
         if (this.listener != null) {
             this.listener.onClear(this);
         }
+        postInvalidate();
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+        postInvalidate();
+    }
+
+    public int getHitColor() {
+        return hitColor;
+    }
+
+    public void setHitColor(int hitColor) {
+        this.hitColor = hitColor;
+        postInvalidate();
+    }
+
+    public int getErrorColor() {
+        return errorColor;
+    }
+
+    public void setErrorColor(int errorColor) {
+        this.errorColor = errorColor;
+        postInvalidate();
+    }
+
+    public int getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(int fillColor) {
+        this.fillColor = fillColor;
+        postInvalidate();
+    }
+
+    public float getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(float lineWidth) {
+        this.lineWidth = lineWidth;
         postInvalidate();
     }
 
@@ -99,12 +151,35 @@ public class PatternLockerView extends View {
     }
 
     private void init(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this.paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.initAttrs(context, attrs, defStyleAttr);
+        this.initData();
+    }
+
+    private void initAttrs(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.PatternLockerView, defStyleAttr, 0);
+
+        this.color = ta.getColor(R.styleable.PatternLockerView_plv_color, Config.getDefaultColor());
+        this.hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, Config.getHitColor());
+        this.errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, Config.getErrorColor());
+        this.fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.getFillColor());
+        this.lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getLineWidth(getResources()));
+
+        ta.recycle();
+
+        this.setColor(this.color);
+        this.setHitColor(this.hitColor);
+        this.setErrorColor(this.errorColor);
+        this.setFillColor(this.fillColor);
+        this.setLineWidth(this.lineWidth);
+    }
+
+    private void initData() {
+        this.paint = new Paint();
         this.paint.setDither(true);
         this.paint.setAntiAlias(true);
         this.paint.setStrokeJoin(Paint.Join.ROUND);
         this.paint.setStrokeCap(Paint.Cap.ROUND);
-        this.paint.setStrokeWidth(Config.getLineWidth(getResources()));
+        this.paint.setStrokeWidth(this.lineWidth);
 
         this.hitList = new ArrayList<>();
     }
@@ -123,7 +198,7 @@ public class PatternLockerView extends View {
                 path.lineTo(this.endX, this.endY);
             }
 
-            this.paint.setColor(Config.getColorByState(this.resultState));
+            this.paint.setColor(this.getColorByState(this.resultState));
             this.paint.setStyle(Paint.Style.STROKE);
             canvas.drawPath(path, this.paint);
         }
@@ -134,19 +209,25 @@ public class PatternLockerView extends View {
         for (int i = 0; i < this.cellBeanList.size(); i++) {
             CellBean item = this.cellBeanList.get(i);
             if (item.isHit) {
-                this.paint.setColor(Config.getColorByState(this.resultState));
+                //outer circle
+                this.paint.setColor(this.getColorByState(this.resultState));
                 canvas.drawCircle(item.x, item.y, item.radius, paint);
 
-                this.paint.setColor(Config.getFillColor());
-                canvas.drawCircle(item.x, item.y, item.radius - this.paint.getStrokeWidth(), this.paint);
+                //fill
+                this.paint.setColor(this.fillColor);
+                canvas.drawCircle(item.x, item.y, item.radius - this.lineWidth, this.paint);
 
-                this.paint.setColor(Config.getColorByState(this.resultState));
+                //inner dot
+                this.paint.setColor(this.getColorByState(this.resultState));
                 canvas.drawCircle(item.x, item.y, item.radius / 5f, paint);
             } else {
-                this.paint.setColor(Config.getDefaultColor());
+                //outer circle
+                this.paint.setColor(this.color);
                 canvas.drawCircle(item.x, item.y, item.radius, paint);
-                this.paint.setColor(Config.getFillColor());
-                canvas.drawCircle(item.x, item.y, item.radius - this.paint.getStrokeWidth(), this.paint);
+
+                //fill
+                this.paint.setColor(this.fillColor);
+                canvas.drawCircle(item.x, item.y, item.radius - lineWidth, this.paint);
             }
         }
     }
@@ -226,5 +307,9 @@ public class PatternLockerView extends View {
                 clearHitState();
             }
         }, Config.getDelayTime());
+    }
+
+    private int getColorByState(ResultState state) {
+        return state == ResultState.OK ? this.hitColor : this.errorColor;
     }
 }

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="dj">
-    </attr>
+    <declare-styleable name="PatternIndicatorView">
+        <attr name="piv_color" format="color|reference" />
+        <attr name="piv_hitColor" format="color|reference" />
+        <attr name="piv_errorColor" format="color|reference" />
+        <attr name="piv_lineWidth" format="dimension|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PatternLockerView">
+        <attr name="plv_color" format="color|reference" />
+        <attr name="plv_hitColor" format="color|reference" />
+        <attr name="plv_errorColor" format="color|reference" />
+        <attr name="plv_fillColor" format="color|reference" />
+        <attr name="plv_lineWidth" format="dimension|reference" />
+    </declare-styleable>
 </resources>

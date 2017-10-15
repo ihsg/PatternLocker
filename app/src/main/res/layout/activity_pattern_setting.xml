@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_blue"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -14,7 +15,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        app:piv_color="@color/colorWhite"
+        app:piv_errorColor="@color/color_red"
+        app:piv_hitColor="@color/colorPrimary" />
 
     <TextView
         android:id="@+id/text_msg"
@@ -23,7 +27,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:text="msg"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorWhite"
         android:textSize="16dp" />
 
     <com.github.ihsg.patternlocker.PatternLockerView
@@ -31,5 +35,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp" />
+        android:layout_marginRight="50dp"
+        app:plv_color="@color/colorWhite"
+        app:plv_errorColor="@color/color_red"
+        app:plv_fillColor="@color/color_blue"
+        app:plv_hitColor="@color/colorPrimary"
+        app:plv_lineWidth="2dp" />
 </LinearLayout>
