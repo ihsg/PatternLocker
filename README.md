@@ -4,9 +4,9 @@
 ### 效果图
 ![setting](./captures/captures.jpg)
 
-### 使用方法ihsg/HelloWorld.svg
-[![Release](https://jitpack.io/v/ihsg/PatternLock.svg)]
-(https://jitpack.io/#ihsg/PatternLock)
+### 使用方法
+[![Release](https://jitpack.io/v/ihsg/PatternLocker.svg)]
+(https://jitpack.io/#ihsg/PatternLocker)
 
 Step1: 首先打开项目更目录下的 build.gradle，添加：
 ````
