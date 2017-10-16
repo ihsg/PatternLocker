@@ -1,5 +1,7 @@
 ###  Pattern Locker
 
+此为Android App中常用控件之一的图案解锁（手势解锁）控件开源库，PatternLockerView为图案解锁主控件，主要负责图案密码的绘制，
+PatternIndicatorView为指示器控件，为PatternLockerView的辅助控件，可选择使用，具体使用方法请参考app module中代码。
 
 ### 效果图
 ![setting](./captures/captures.jpg)
@@ -24,7 +26,7 @@ dependencies {
 }
 ````
 
-Step3: 在手势密码设置页添加PatternLockView和PatternIndicatorView（如果需要的化话）自定义控件，
+Step3: 在手势密码设置页添加PatternLockViewer和PatternIndicatorView（如果需要的化话）自定义控件，
 并根据UI设计设置属性，例如此处使用demo中activity_pattern_setting.xml 文件为例：
 ````
 <?xml version="1.0" encoding="utf-8"?>
@@ -73,7 +75,7 @@ Step3: 在手势密码设置页添加PatternLockView和PatternIndicatorView（�
 </LinearLayout>
 
 ````
-在java代码中为PatternLockView添加OnPatternChangeListener并处理相应业务逻辑，例如：
+在java代码中为PatternLockerView添加OnPatternChangeListener并处理相应业务逻辑，例如：
 ````
 package com.github.ihsg.demo;
 
@@ -161,10 +163,10 @@ public class PatternSettingActivity extends AppCompatActivity {
 }
 ````
 
-Step4: 在手势密码验证页添加添加PatternLockView和PatternIndicatorView（如果需要的化话）自定义控件，并处理相应业务逻辑。
+Step4: 在手势密码验证页添加添加PatternLockerView和PatternIndicatorView（如果需要的化话）自定义控件，并处理相应业务逻辑。
 
 ### 自定义属性说明
-- PatternLockView属性
+- PatternLockerView属性
 
 属性名 | 说明 | 默认值
 :----------- | :----------- | :-----------
