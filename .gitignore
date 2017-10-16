@@ -31,7 +31,7 @@ proguard/
 .navigation/
 
 # Android Studio captures folder
-captures/
+# captures/
 
 # ignore intellij folder
 .idea/
