@@ -1,13 +1,7 @@
 ###  Pattern Locker
 
 ### 效果图
-![setting](./captures/setting.png)
-![setting1](./captures/setting_1.png)
-![setting2](./captures/setting_2.png)
-![setting_error1](./captures/setting_error_1.png)
-![setting_error2](./captures/setting_error_2.png)
-![checking](./captures/checking.png)
-![checking_error](./captures/checking_error_1.png)
+![setting](./captures/captures.jpg)
 
 ### 使用方法
 
