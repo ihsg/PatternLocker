@@ -75,7 +75,41 @@ Step3: 在手势密码设置页添加PatternLockViewer和PatternIndicatorView（
 </LinearLayout>
 
 ````
-在java代码中为PatternLockerView添加OnPatternChangeListener并处理相应业务逻辑，例如：
+在java代码中为PatternLockerView添加OnPatternChangeListener并处理相应业务逻辑，OnPatternChangeListener接口说明如下：
+````
+public interface OnPatternChangeListener {
+    /**
+     * 图案绘制开始会回调自方法
+     *
+     * @param view
+     */
+    void onStart(PatternLockerView view);
+
+    /**
+     * 图案绘制改变会回调自方法，只有@param hitList 改变了才会触发此方法
+     *
+     * @param view
+     * @param hitList
+     */
+    void onChange(PatternLockerView view, List<Integer> hitList);
+
+    /**
+     * 图案绘制完成会回调自方法
+     *
+     * @param view
+     * @param hitList
+     */
+    void onComplete(PatternLockerView view, List<Integer> hitList);
+
+    /**
+     * 已绘制的图案被清除会回调自方法
+     *
+     * @param view
+     */
+    void onClear(PatternLockerView view);
+}
+````
+此处以PatternSettingActivity.java为例：
 ````
 package com.github.ihsg.demo;
 
