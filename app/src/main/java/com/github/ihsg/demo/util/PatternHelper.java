@@ -1,4 +1,4 @@
-package com.github.ihsg.demo;
+package com.github.ihsg.demo.util;
 
 import android.text.TextUtils;
 
@@ -61,7 +61,7 @@ public class PatternHelper {
         }
 
         this.storagePwd = getFromStorage();
-        if (this.storagePwd.equals(convert2String(hitList))) {
+        if (!TextUtils.isEmpty(this.storagePwd) && this.storagePwd.equals(convert2String(hitList))) {
             this.message = getCheckingSuccessMsg();
             this.isOk = true;
             this.isFinish = true;

@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">手势解锁demo</string>
+    <string name="title_default_style">默认样式</string>
+    <string name="title_simple_style">简单自定义样式</string>
+    <string name="title_whole_style">完全自定义样式</string>
+
     <string name="title_pattern_setting">设置手势密码</string>
     <string name="title_pattern_checking">验证手势密码</string>
 </resources>

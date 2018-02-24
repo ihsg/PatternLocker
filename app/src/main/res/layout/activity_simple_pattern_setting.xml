@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_blue"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        style="@style/AppTheme.Toolbar"
+        app:title="@string/title_pattern_setting" />
+
+    <TextView
+        android:id="@+id/text_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="msg"
+        android:textColor="@color/colorWhite"
+        android:textSize="16dp" />
+
+    <com.github.ihsg.patternlocker.PatternIndicatorView
+        android:id="@+id/pattern_indicator_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        app:piv_color="@color/colorWhite"
+        app:piv_hitColor="@color/colorPrimaryDark"
+        app:piv_fillColor="@color/color_blue"
+        app:piv_errorColor="@color/color_red"
+        app:plv_lineWidth="2dp"/>
+
+    <com.github.ihsg.patternlocker.PatternLockerView
+        android:id="@+id/pattern_lock_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        app:plv_color="@color/colorWhite"
+        app:plv_hitColor="@color/colorPrimaryDark"
+        app:plv_fillColor="@color/color_blue"
+        app:plv_errorColor="@color/color_red"
+        app:plv_lineWidth="3dp"/>
+</LinearLayout>

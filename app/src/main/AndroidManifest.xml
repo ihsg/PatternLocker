@@ -10,15 +10,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PatternSettingActivity" />
-        <activity android:name=".PatternCheckingActivity" />
+        <activity android:name=".ui.def.DefaultPatternSettingActivity" />
+        <activity android:name=".ui.def.DefaultPatternCheckingActivity" />
+        <activity android:name=".ui.def.DefaultStyleActivity" />
+        <activity android:name=".ui.simple.SimpleStyleActivity" />
+        <activity android:name=".ui.simple.SimplePatternSettingActivity" />
+        <activity android:name=".ui.simple.SimplePatternCheckingActivity" />
+        <activity android:name=".ui.whole.WholeStyleActivity" />
+        <activity android:name=".ui.whole.WholePatternSettingActivity" />
+        <activity android:name=".ui.whole.WholePatternCheckingActivity" />
     </application>
 
 </manifest>

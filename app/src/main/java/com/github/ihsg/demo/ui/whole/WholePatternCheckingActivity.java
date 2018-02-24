@@ -1,4 +1,4 @@
-package com.github.ihsg.demo;
+package com.github.ihsg.demo.ui.whole;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,14 +6,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.github.ihsg.demo.R;
+import com.github.ihsg.demo.util.PatternHelper;
+import com.github.ihsg.patternlocker.IHitCellView;
 import com.github.ihsg.patternlocker.OnPatternChangeListener;
 import com.github.ihsg.patternlocker.PatternIndicatorView;
 import com.github.ihsg.patternlocker.PatternLockerView;
-import com.github.ihsg.patternlocker.ResultState;
 
 import java.util.List;
 
-public class PatternSettingActivity extends AppCompatActivity {
+public class WholePatternCheckingActivity extends AppCompatActivity {
 
     private PatternLockerView patternLockerView;
     private PatternIndicatorView patternIndicatorView;
@@ -21,59 +23,64 @@ public class PatternSettingActivity extends AppCompatActivity {
     private PatternHelper patternHelper;
 
     public static void startAction(Context context) {
-        Intent intent = new Intent(context, PatternSettingActivity.class);
+        Intent intent = new Intent(context, WholePatternCheckingActivity.class);
         context.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pattern_setting);
+        setContentView(R.layout.activity_whole_pattern_checking);
 
-        this.patternIndicatorView = (PatternIndicatorView) findViewById(R.id.pattern_indicator_view);
-        this.patternLockerView = (PatternLockerView) findViewById(R.id.pattern_lock_view);
-        this.textMsg = (TextView) findViewById(R.id.text_msg);
+        this.patternIndicatorView = findViewById(R.id.pattern_indicator_view);
+        this.patternLockerView = findViewById(R.id.pattern_lock_view);
+        this.textMsg = findViewById(R.id.text_msg);
+
+        final IHitCellView hitCellView = new RippleLockerHitCellView()
+                .setHitColor(this.patternLockerView.getHitColor())
+                .setErrorColor(this.patternLockerView.getErrorColor());
+
+        this.patternLockerView.setHitCellView(hitCellView)
+                .setLinkedLineView(null)
+                .build();
 
         this.patternLockerView.setOnPatternChangedListener(new OnPatternChangeListener() {
             @Override
             public void onStart(PatternLockerView view) {
-                patternIndicatorView.updateState(null, ResultState.OK);
             }
 
             @Override
             public void onChange(PatternLockerView view, List<Integer> hitList) {
-                patternIndicatorView.updateState(hitList, ResultState.OK);
             }
 
             @Override
             public void onComplete(PatternLockerView view, List<Integer> hitList) {
-                ResultState resultState = isPatternOk(hitList) ? ResultState.OK : ResultState.ERROR;
-                view.setResultState(resultState);
-                patternIndicatorView.updateState(hitList, resultState);
+                boolean isError = !isPatternOk(hitList);
+                view.updateStatus(isError);
+                patternIndicatorView.updateState(hitList, isError);
                 updateMsg();
             }
 
             @Override
             public void onClear(PatternLockerView view) {
-//                patternIndicatorView.updateState(null, ResultState.OK);
                 finishIfNeeded();
             }
         });
 
-        this.textMsg.setText("设置解锁图案");
+        this.textMsg.setText("绘制解锁图案");
         this.patternHelper = new PatternHelper();
     }
 
     private boolean isPatternOk(List<Integer> hitList) {
-        this.patternHelper.validateForSetting(hitList);
+        this.patternHelper.validateForChecking(hitList);
         return this.patternHelper.isOk();
     }
 
     private void updateMsg() {
         this.textMsg.setText(this.patternHelper.getMessage());
         this.textMsg.setTextColor(this.patternHelper.isOk() ?
-                getResources().getColor(R.color.colorPrimary) :
-                getResources().getColor(R.color.colorAccent));
+                getResources().getColor(R.color.colorPrimaryDark) :
+                getResources().getColor(R.color.color_red));
     }
 
     private void finishIfNeeded() {

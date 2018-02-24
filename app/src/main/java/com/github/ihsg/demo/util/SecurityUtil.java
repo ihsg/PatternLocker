@@ -1,4 +1,4 @@
-package com.github.ihsg.demo;
+package com.github.ihsg.demo.util;
 
 import java.io.UnsupportedEncodingException;
 

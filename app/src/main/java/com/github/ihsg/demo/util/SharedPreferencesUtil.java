@@ -1,7 +1,9 @@
-package com.github.ihsg.demo;
+package com.github.ihsg.demo.util;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.github.ihsg.demo.TestApplication;
 
 /**
  * Created by hsg on 14/10/2017.
