@@ -3,10 +3,10 @@ package com.github.ihsg.patternlocker;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -18,20 +18,30 @@ import java.util.List;
  */
 
 public class PatternLockerView extends View {
-    private int color;
-    private int hitColor;
-    private int errorColor;
-    private int fillColor;
+    private static final String TAG = "PatternLockerView";
+
+    private @ColorInt
+    int normalColor;
+    private @ColorInt
+    int hitColor;
+    private @ColorInt
+    int errorColor;
+    private @ColorInt
+    int fillColor;
     private float lineWidth;
 
     private float endX;
     private float endY;
+
     private int hitSize;
-    private Paint paint;
-    private ResultState resultState;
+    private boolean isError;
     private List<CellBean> cellBeanList;
     private List<Integer> hitList;
     private OnPatternChangeListener listener;
+
+    private ILockerLinkedLineView linkedLineView;
+    private INormalCellView normalCellView;
+    private IHitCellView hitCellView;
 
     public PatternLockerView(Context context) {
         this(context, null);
@@ -46,64 +56,129 @@ public class PatternLockerView extends View {
         this.init(context, attrs, defStyleAttr);
     }
 
-    public void setResultState(ResultState resultState) {
-        this.resultState = resultState;
-    }
-
     public void setOnPatternChangedListener(OnPatternChangeListener listener) {
         this.listener = listener;
     }
 
+    public void updateStatus(boolean isError) {
+        this.isError = isError;
+        postInvalidate();
+    }
+
     public void clearHitState() {
         clearHitData();
+        this.isError = false;
         if (this.listener != null) {
             this.listener.onClear(this);
         }
+
         postInvalidate();
     }
 
-    public int getColor() {
-        return color;
+    public int getNormalColor() {
+        return normalColor;
     }
 
-    public void setColor(int color) {
-        this.color = color;
-        postInvalidate();
+    public PatternLockerView setNormalColor(int normalColor) {
+        this.normalColor = normalColor;
+        return this;
     }
 
     public int getHitColor() {
         return hitColor;
     }
 
-    public void setHitColor(int hitColor) {
+    public PatternLockerView setHitColor(int hitColor) {
         this.hitColor = hitColor;
-        postInvalidate();
+        return this;
     }
 
     public int getErrorColor() {
         return errorColor;
     }
 
-    public void setErrorColor(int errorColor) {
+    public PatternLockerView setErrorColor(int errorColor) {
         this.errorColor = errorColor;
-        postInvalidate();
+        return this;
     }
 
     public int getFillColor() {
         return fillColor;
     }
 
-    public void setFillColor(int fillColor) {
+    public PatternLockerView setFillColor(int fillColor) {
         this.fillColor = fillColor;
-        postInvalidate();
+        return this;
     }
 
     public float getLineWidth() {
         return lineWidth;
     }
 
-    public void setLineWidth(float lineWidth) {
+    public PatternLockerView setLineWidth(float lineWidth) {
         this.lineWidth = lineWidth;
+        return this;
+    }
+
+    public ILockerLinkedLineView getLinkedLineView() {
+        return linkedLineView;
+    }
+
+    public PatternLockerView setLinkedLineView(ILockerLinkedLineView linkedLineView) {
+        this.linkedLineView = linkedLineView;
+        return this;
+    }
+
+    public INormalCellView getNormalCellView() {
+        return normalCellView;
+    }
+
+    public PatternLockerView setNormalCellView(INormalCellView normalCellView) {
+        this.normalCellView = normalCellView;
+        return this;
+    }
+
+    public IHitCellView getHitCellView() {
+        return hitCellView;
+    }
+
+    public PatternLockerView setHitCellView(IHitCellView hitCellView) {
+        this.hitCellView = hitCellView;
+        return this;
+    }
+
+    public void buildWithDefaultStyle() {
+        this.setNormalCellView(new DefaultLockerNormalCellView()
+                .setNormalColor(this.getNormalColor())
+                .setFillColor(this.getFillColor())
+                .setLineWidth(this.getLineWidth())
+        ).setHitCellView(new DefaultLockerHitCellView()
+                .setHitColor(this.getHitColor())
+                .setErrorColor(this.getErrorColor())
+                .setFillColor(this.getFillColor())
+                .setLineWidth(this.getLineWidth())
+        ).setLinkedLineView(new DefaultLockerLinkedLineView()
+                .setNormalColor(this.getHitColor())
+                .setErrorColor(this.getErrorColor())
+                .setLineWidth(this.getLineWidth())
+        ).build();
+    }
+
+    public void build() {
+        if (getNormalCellView() == null) {
+            Log.e(TAG, "build(), normalCellView is null");
+            return;
+        }
+
+        if (getHitCellView() == null) {
+            Log.e(TAG, "build(), hitCellView is null");
+            return;
+        }
+
+        if (getLinkedLineView() == null) {
+            Log.w(TAG, "build(), linkedLineView is null");
+        }
+
         postInvalidate();
     }
 
@@ -117,10 +192,11 @@ public class PatternLockerView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.cellBeanList == null) {
-            this.cellBeanList = new CellFactory(getWidth(), getHeight()).getCellBeanList();
+            this.cellBeanList = new CellFactory(getWidth(), getHeight())
+                    .getCellBeanList();
         }
-        drawLine(canvas);
-        drawCircles(canvas);
+        drawLinkedLine(canvas);
+        drawCells(canvas);
     }
 
     @Override
@@ -158,15 +234,15 @@ public class PatternLockerView extends View {
     private void initAttrs(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.PatternLockerView, defStyleAttr, 0);
 
-        this.color = ta.getColor(R.styleable.PatternLockerView_plv_color, Config.getDefaultColor());
-        this.hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, Config.getHitColor());
-        this.errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, Config.getErrorColor());
-        this.fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.getFillColor());
-        this.lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getLineWidth(getResources()));
+        this.normalColor = ta.getColor(R.styleable.PatternLockerView_plv_color, Config.getDefaultNormalColor());
+        this.hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, Config.getDefaultHitColor());
+        this.errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, Config.getDefaultErrorColor());
+        this.fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.getDefaultFillColor());
+        this.lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getDefaultLineWidth(getResources()));
 
         ta.recycle();
 
-        this.setColor(this.color);
+        this.setNormalColor(this.normalColor);
         this.setHitColor(this.hitColor);
         this.setErrorColor(this.errorColor);
         this.setFillColor(this.fillColor);
@@ -174,60 +250,38 @@ public class PatternLockerView extends View {
     }
 
     private void initData() {
-        this.paint = new Paint();
-        this.paint.setDither(true);
-        this.paint.setAntiAlias(true);
-        this.paint.setStrokeJoin(Paint.Join.ROUND);
-        this.paint.setStrokeCap(Paint.Cap.ROUND);
-        this.paint.setStrokeWidth(this.lineWidth);
-
         this.hitList = new ArrayList<>();
+        this.buildWithDefaultStyle();
     }
 
-    private void drawLine(Canvas canvas) {
-        if (!this.hitList.isEmpty()) {
-            Path path = new Path();
-            CellBean first = this.cellBeanList.get(hitList.get(0));
-            path.moveTo(first.x, first.y);
-            for (int i = 1; i < hitList.size(); i++) {
-                CellBean c = this.cellBeanList.get(hitList.get(i));
-                path.lineTo(c.x, c.y);
-            }
-
-            if (((this.endX != 0) || (this.endY != 0)) && (hitList.size() < 9)) {
-                path.lineTo(this.endX, this.endY);
-            }
-
-            this.paint.setColor(this.getColorByState(this.resultState));
-            this.paint.setStyle(Paint.Style.STROKE);
-            canvas.drawPath(path, this.paint);
+    private void drawLinkedLine(Canvas canvas) {
+        if ((this.hitList != null) && !this.hitList.isEmpty() && (getLinkedLineView() != null)) {
+            getLinkedLineView().draw(canvas,
+                    this.hitList,
+                    this.cellBeanList,
+                    this.endX,
+                    this.endY,
+                    this.isError);
         }
     }
 
-    private void drawCircles(Canvas canvas) {
-        this.paint.setStyle(Paint.Style.FILL);
+    private void drawCells(Canvas canvas) {
+        if (getHitCellView() == null) {
+            Log.e(TAG, "drawCells(), hitCellView is null");
+            return;
+        }
+
+        if (getNormalCellView() == null) {
+            Log.e(TAG, "drawCells(), normalCellView is null");
+            return;
+        }
+
         for (int i = 0; i < this.cellBeanList.size(); i++) {
-            CellBean item = this.cellBeanList.get(i);
+            final CellBean item = this.cellBeanList.get(i);
             if (item.isHit) {
-                //outer circle
-                this.paint.setColor(this.getColorByState(this.resultState));
-                canvas.drawCircle(item.x, item.y, item.radius, paint);
-
-                //fill
-                this.paint.setColor(this.fillColor);
-                canvas.drawCircle(item.x, item.y, item.radius - this.lineWidth, this.paint);
-
-                //inner dot
-                this.paint.setColor(this.getColorByState(this.resultState));
-                canvas.drawCircle(item.x, item.y, item.radius / 5f, paint);
+                getHitCellView().draw(canvas, item, this.isError);
             } else {
-                //outer circle
-                this.paint.setColor(this.color);
-                canvas.drawCircle(item.x, item.y, item.radius, paint);
-
-                //fill
-                this.paint.setColor(this.fillColor);
-                canvas.drawCircle(item.x, item.y, item.radius - lineWidth, this.paint);
+                getNormalCellView().draw(canvas, item);
             }
         }
     }
@@ -290,7 +344,6 @@ public class PatternLockerView extends View {
     }
 
     private void clearHitData() {
-        this.resultState = ResultState.OK;
         for (int i = 0; i < this.hitList.size(); i++) {
             this.cellBeanList.get(hitList.get(i)).isHit = false;
         }
@@ -298,18 +351,23 @@ public class PatternLockerView extends View {
         this.hitSize = 0;
     }
 
-    private void startTimer() {
-        setEnabled(false);
-        this.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setEnabled(true);
-                clearHitState();
-            }
-        }, Config.getDelayTime());
+    private final Runnable action = new Runnable() {
+        @Override
+        public void run() {
+            setEnabled(true);
+            clearHitState();
+        }
+    };
+
+    @Override
+    protected void onDetachedFromWindow() {
+        this.setOnPatternChangedListener(null);
+        this.removeCallbacks(this.action);
+        super.onDetachedFromWindow();
     }
 
-    private int getColorByState(ResultState state) {
-        return state == ResultState.OK ? this.hitColor : this.errorColor;
+    private void startTimer() {
+        setEnabled(false);
+        this.postDelayed(this.action, Config.getDefaultDelayTime());
     }
 }

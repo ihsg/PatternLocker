@@ -35,6 +35,6 @@ class CellFactory {
     }
 
     public List<CellBean> getCellBeanList() {
-        return cellBeanList;
+        return this.cellBeanList;
     }
 }

@@ -3,10 +3,9 @@ package com.github.ihsg.patternlocker;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -17,15 +16,22 @@ import java.util.List;
  */
 
 public class PatternIndicatorView extends View {
-    private int color;
+    private static final String TAG = "PatternIndicatorView";
+
+    private int normalColor;
+    private int fillColor;
     private int hitColor;
     private int errorColor;
     private float lineWidth;
 
-    private Paint paint;
-    private ResultState resultState;
+    private boolean isError;
     private List<Integer> hitList;
     private List<CellBean> cellBeanList;
+
+    private IIndicatorLinkedLineView linkedLineView;
+    private INormalCellView normalCellView;
+    private IHitCellView hitCellView;
+
 
     public PatternIndicatorView(Context context) {
         this(context, null);
@@ -40,43 +46,111 @@ public class PatternIndicatorView extends View {
         init(context, attrs, defStyleAttr);
     }
 
-    public int getColor() {
-        return color;
+    public int getNormalColor() {
+        return normalColor;
     }
 
-    public void setColor(int color) {
-        this.color = color;
-        postInvalidate();
+    public PatternIndicatorView setNormalColor(int normalColor) {
+        this.normalColor = normalColor;
+        return this;
+    }
+
+    public int getFillColor() {
+        return fillColor;
+    }
+
+    public PatternIndicatorView setFillColor(int fillColor) {
+        this.fillColor = fillColor;
+        return this;
     }
 
     public int getHitColor() {
         return hitColor;
     }
 
-    public void setHitColor(int hitColor) {
+    public PatternIndicatorView setHitColor(int hitColor) {
         this.hitColor = hitColor;
-        postInvalidate();
+        return this;
     }
 
     public int getErrorColor() {
         return errorColor;
     }
 
-    public void setErrorColor(int errorColor) {
+    public PatternIndicatorView setErrorColor(int errorColor) {
         this.errorColor = errorColor;
-        postInvalidate();
+        return this;
     }
 
     public float getLineWidth() {
         return lineWidth;
     }
 
-    public void setLineWidth(float lineWidth) {
+    public PatternIndicatorView setLineWidth(float lineWidth) {
         this.lineWidth = lineWidth;
+        return this;
+    }
+
+    public IIndicatorLinkedLineView getLinkedLineView() {
+        return linkedLineView;
+    }
+
+    public PatternIndicatorView setLinkedLineView(IIndicatorLinkedLineView linkedLineView) {
+        this.linkedLineView = linkedLineView;
+        return this;
+    }
+
+    public INormalCellView getNormalCellView() {
+        return normalCellView;
+    }
+
+    public PatternIndicatorView setNormalCellView(INormalCellView normalCellView) {
+        this.normalCellView = normalCellView;
+        return this;
+    }
+
+    public IHitCellView getHitCellView() {
+        return hitCellView;
+    }
+
+    public PatternIndicatorView setHitCellView(IHitCellView hitCellView) {
+        this.hitCellView = hitCellView;
+        return this;
+    }
+
+    public void buildWithDefaultStyle() {
+        this.setNormalCellView(new DefaultIndicatorNormalCellView()
+                .setNormalColor(this.getNormalColor())
+                .setFillColor(this.getFillColor())
+                .setLineWidth(this.getLineWidth())
+        ).setHitCellView(new DefaultIndicatorHitCellView()
+                .setErrorColor(this.getErrorColor())
+                .setNormalColor(this.getHitColor())
+        ).setLinkedLineView(new DefaultIndicatorLinkedLineView()
+                .setNormalColor(this.getHitColor())
+                .setErrorColor(this.getErrorColor())
+                .setLineWidth(this.getLineWidth())
+        ).build();
+    }
+
+    public void build() {
+        if (getNormalCellView() == null) {
+            Log.e(TAG, "build(), normalCellView is null");
+            return;
+        }
+
+        if (getHitCellView() == null) {
+            Log.e(TAG, "build(), hitCellView is null");
+            return;
+        }
+
+        if (getLinkedLineView() == null) {
+            Log.w(TAG, "build(), linkedLineView is null");
+        }
         postInvalidate();
     }
 
-    public void updateState(List<Integer> hitList, ResultState resultState) {
+    public void updateState(List<Integer> hitList, boolean isError) {
         //1. reset to default state
         if (!this.hitList.isEmpty()) {
             for (int i : this.hitList) {
@@ -96,7 +170,7 @@ public class PatternIndicatorView extends View {
         }
 
         //3. update result
-        this.resultState = resultState;
+        this.isError = isError;
 
         //4. update view
         postInvalidate();
@@ -112,10 +186,13 @@ public class PatternIndicatorView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.cellBeanList == null) {
-            this.cellBeanList = new CellFactory(getWidth(), getHeight()).getCellBeanList();
+            this.cellBeanList = new CellFactory(getWidth() - getPaddingLeft() - getPaddingRight(),
+                    getHeight() - getPaddingTop() - getPaddingBottom())
+                    .getCellBeanList();
         }
-        drawLine(canvas);
-        drawCircles(canvas);
+
+        drawLinkedLine(canvas);
+        drawCells(canvas);
     }
 
     private void init(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -126,62 +203,53 @@ public class PatternIndicatorView extends View {
     private void initAttrs(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         final TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.PatternIndicatorView, defStyleAttr, 0);
 
-        this.color = ta.getColor(R.styleable.PatternIndicatorView_piv_color, Config.getDefaultColor());
-        this.hitColor = ta.getColor(R.styleable.PatternIndicatorView_piv_hitColor, Config.getHitColor());
-        this.errorColor = ta.getColor(R.styleable.PatternIndicatorView_piv_errorColor, Config.getErrorColor());
-        this.lineWidth = ta.getDimension(R.styleable.PatternIndicatorView_piv_lineWidth, Config.getLineWidth(getResources()));
+        this.normalColor = ta.getColor(R.styleable.PatternIndicatorView_piv_color, Config.getDefaultNormalColor());
+        this.fillColor = ta.getColor(R.styleable.PatternIndicatorView_piv_fillColor, Config.getDefaultFillColor());
+        this.hitColor = ta.getColor(R.styleable.PatternIndicatorView_piv_hitColor, Config.getDefaultHitColor());
+        this.errorColor = ta.getColor(R.styleable.PatternIndicatorView_piv_errorColor, Config.getDefaultErrorColor());
+        this.lineWidth = ta.getDimension(R.styleable.PatternIndicatorView_piv_lineWidth, Config.getDefaultLineWidth(getResources()));
 
         ta.recycle();
 
-        this.setColor(this.color);
+        this.setNormalColor(this.normalColor);
+        this.setFillColor(this.fillColor);
         this.setHitColor(this.hitColor);
         this.setErrorColor(this.errorColor);
         this.setLineWidth(this.lineWidth);
     }
 
     private void initData() {
-        this.paint = new Paint();
-        this.paint.setDither(true);
-        this.paint.setAntiAlias(true);
-        this.paint.setStrokeJoin(Paint.Join.ROUND);
-        this.paint.setStrokeCap(Paint.Cap.ROUND);
-        this.paint.setStrokeWidth(this.lineWidth);
-
         this.hitList = new ArrayList<>();
+        this.buildWithDefaultStyle();
     }
 
-    private void drawLine(Canvas canvas) {
-        if (!this.hitList.isEmpty()) {
-            Path path = new Path();
-            CellBean first = this.cellBeanList.get(hitList.get(0));
-            path.moveTo(first.x, first.y);
-            for (int i = 1; i < hitList.size(); i++) {
-                CellBean c = this.cellBeanList.get(hitList.get(i));
-                path.lineTo(c.x, c.y);
-            }
-
-            this.paint.setColor(this.getColorByState(this.resultState));
-            this.paint.setStyle(Paint.Style.STROKE);
-            canvas.drawPath(path, this.paint);
+    private void drawLinkedLine(Canvas canvas) {
+        if (!this.hitList.isEmpty() && (this.getLinkedLineView() != null)) {
+            this.getLinkedLineView().draw(canvas,
+                    this.hitList,
+                    this.cellBeanList,
+                    this.isError);
         }
     }
 
-    private void drawCircles(Canvas canvas) {
+    private void drawCells(Canvas canvas) {
+        if (this.getHitCellView() == null) {
+            Log.e(TAG, "drawCells(), hitCellView is null");
+            return;
+        }
+
+        if (this.getNormalCellView() == null) {
+            Log.e(TAG, "drawCells(), normalCellView is null");
+            return;
+        }
+
         for (int i = 0; i < this.cellBeanList.size(); i++) {
             CellBean item = this.cellBeanList.get(i);
             if (item.isHit) {
-                this.paint.setColor(this.getColorByState(this.resultState));
-                this.paint.setStyle(Paint.Style.FILL);
-                canvas.drawCircle(item.x, item.y, item.radius - this.paint.getStrokeWidth() / 2f, paint);
+                this.getHitCellView().draw(canvas, item, this.isError);
             } else {
-                this.paint.setColor(this.color);
-                this.paint.setStyle(Paint.Style.STROKE);
-                canvas.drawCircle(item.x, item.y, item.radius - this.paint.getStrokeWidth() / 2f, paint);
+                this.getNormalCellView().draw(canvas, item);
             }
         }
-    }
-
-    private int getColorByState(ResultState state) {
-        return state == ResultState.OK ? this.hitColor : this.errorColor;
     }
 }
