@@ -1,65 +1,54 @@
-###  Pattern Locker
+##  Pattern Locker
 
-此为Android App中常用控件之一的图案解锁（手势解锁）控件开源库，PatternLockerView为图案解锁主控件，主要负责图案密码的绘制，
-PatternIndicatorView为指示器控件，为PatternLockerView的辅助控件，可选择使用，具体使用方法请参考app module中代码。
+此为Android App中常用控件之一的图案解锁（手势解锁、手势密码、九宫格密码、九宫格图形锁等）控件开源库，PatternLockerView为主控件，主要负责图案密码的设置，PatternIndicatorView为指示器辅助控件，可根据设计需要选择使用。
 
-### 效果图
+由于本人水平有限，如果您在使用的过程中发现bug，或者发现有更好的实现方式，或者发现代码中有写得不好的地方，请提issue或者PR，本人万分感激！！！
+
+## 效果图
 ![setting](./captures/captures.jpg)
 
-### 使用方法
+
+## 使用方法
+
 [![](https://jitpack.io/v/ihsg/PatternLocker.svg)](https://jitpack.io/#ihsg/PatternLocker)
 
-Step1: 首先打开项目更目录下的 build.gradle，添加：
+第一步: 首先打开项目根目录下的 build.gradle，添加jitpack仓库地址，代码如下：
 ````
 allprojects {
- repositories {
-    jcenter()
-    maven { url "https://jitpack.io" }
- }
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
 }
 ````
 
-Step2：打开想依赖这个 library 的模块，比如这里我们是 app 这个 module，添加：
+第二步: 打开需要以来此 library 的模块，比如这里我这里是 app 这个 module，添加：
 ````
 dependencies {
-	compile 'com.github.ihsg:PatternLock:1.0.0'
+    ....
+    compile 'com.github.ihsg:PatternLock:2.0.0'
 }
 ````
 
-Step3: 在手势密码设置页添加PatternLockViewer和PatternIndicatorView（如果需要的化话）自定义控件，
-并根据UI设计设置属性，例如此处使用demo中activity_pattern_setting.xml 文件为例：
+第三步: 在布局文件中添加PatternLockViewer和PatternIndicatorView（如果需要的化话）控件，示意如下：
+
 ````
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_blue"
-    android:orientation="vertical">
-
-    <android.support.v7.widget.Toolbar
-        style="@style/AppTheme.Toolbar"
-        app:title="@string/title_pattern_setting" />
-
+    android:background="@color/colorWhite"
+    android:orientation="vertical">        
+    
+    ......    
+    
     <com.github.ihsg.patternlocker.PatternIndicatorView
         android:id="@+id/pattern_indicator_view"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        app:piv_color="@color/colorWhite"
-        app:piv_errorColor="@color/color_red"
-        app:piv_hitColor="@color/colorPrimary" />
-
-    <TextView
-        android:id="@+id/text_msg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="msg"
-        android:textColor="@color/colorWhite"
-        android:textSize="16dp" />
+        android:layout_margin="20dp" />
 
     <com.github.ihsg.patternlocker.PatternLockerView
         android:id="@+id/pattern_lock_view"
@@ -67,26 +56,22 @@ Step3: 在手势密码设置页添加PatternLockViewer和PatternIndicatorView（
         android:layout_height="match_parent"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        app:plv_color="@color/colorWhite"
-        app:plv_errorColor="@color/color_red"
-        app:plv_fillColor="@color/color_blue"
-        app:plv_hitColor="@color/colorPrimary"
-        app:plv_lineWidth="2dp" />
+        android:layout_marginTop="20dp" />
 </LinearLayout>
 
 ````
-在java代码中为PatternLockerView添加OnPatternChangeListener并处理相应业务逻辑，OnPatternChangeListener接口说明如下：
+第四步: 在java代码中为PatternLockerView添加OnPatternChangeListener并处理相应业务逻辑，OnPatternChangeListener接口说明如下：
 ````
 public interface OnPatternChangeListener {
     /**
-     * 图案绘制开始会回调自方法
+     * 开始绘制图案时（即手指按下触碰到绘画区域时）会调用该方法
      *
      * @param view
      */
     void onStart(PatternLockerView view);
 
     /**
-     * 图案绘制改变会回调自方法，只有@param hitList 改变了才会触发此方法
+     * 图案绘制改变时（即手指在绘画区域移动时）会调用该方法，请注意只有 @param hitList改变了才会触发此方法
      *
      * @param view
      * @param hitList
@@ -94,7 +79,7 @@ public interface OnPatternChangeListener {
     void onChange(PatternLockerView view, List<Integer> hitList);
 
     /**
-     * 图案绘制完成会回调自方法
+     * 图案绘制完成时（即手指抬起离开绘画区域时）会调用该方法
      *
      * @param view
      * @param hitList
@@ -102,121 +87,174 @@ public interface OnPatternChangeListener {
     void onComplete(PatternLockerView view, List<Integer> hitList);
 
     /**
-     * 已绘制的图案被清除会回调自方法
+     * 已绘制的图案被清除时会调用该方法
      *
      * @param view
      */
     void onClear(PatternLockerView view);
 }
 ````
-此处以PatternSettingActivity.java为例：
+## 自由定制
+
+### 1. 简单定制   
+可以通过xml和java代码两种方式更改默认颜色、绘制时颜色、出错时颜色、填充色以及连接线粗细
+
+> 推荐使用xml方式，更精简
+
+#### 1.1 xml方式
+- PatternLockerView可设置到属性
+
+| 属性名            | 说明         | 默认值     |
+| :------------- | :--------- | :------ |
+| plv_color      | 默认图案的颜色    | #2196F3 |
+| plv_hitColor   | 绘制图案的颜色    | #3F51B5 |
+| plv_errorColor | 绘制图案出错时的颜色 | #F44336 |
+| plv_fillColor  | 图案填充色      | #FFFFFF |
+| plv_lineWidth  | 连接线线宽      | 1dp     |
+
+示例如下：
+```
+<com.github.ihsg.patternlocker.PatternLockerView
+        android:id="@+id/pattern_lock_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="20dp"
+        app:plv_color="@color/colorWhite"
+        app:plv_hitColor="@color/colorPrimaryDark"
+        app:plv_fillColor="@color/color_blue"
+        app:plv_errorColor="@color/color_red"
+        app:plv_lineWidth="3dp"/>
+```
+
+- PatternIndicatorView可设置到属性
+
+| 属性名            | 说明             | 默认值     |
+| :------------- | :------------- | :------ |
+| piv_color      | 指示器默认图案的颜色     | #2196F3 |
+| piv_hitColor   | 指示器中选中图案的颜色    | #3F51B5 |
+| piv_errorColor | 指示器中选中图案出错时的颜色 | #F44336 |
+| piv_fillColor  | 图案填充色          | #FFFFFF |
+| piv_lineWidth  | 指示器连接线线宽       | 1dp     |
+
+示例如下：
+```
+<com.github.ihsg.patternlocker.PatternIndicatorView
+        android:id="@+id/pattern_indicator_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        app:piv_color="@color/colorWhite"
+        app:piv_hitColor="@color/colorPrimaryDark"
+        app:piv_fillColor="@color/color_blue"
+        app:piv_errorColor="@color/color_red"
+        app:plv_lineWidth="2dp"/>
+```
+#### 1.2 java代码方式
+
+> 注意：设置完一定要调用buildWithDefaultStyle()方法使各个设置生效！！！
+
+- PatternLockerView可设置到属性
 ````
-package com.github.ihsg.demo;
+this.patternIndicatorView.setFillColor(getResources().getColor(R.color.color_blue))
+                .setNormalColor(getResources().getColor(R.color.colorWhite))
+                .setHitColor(getResources().getColor(R.color.colorPrimaryDark))
+                .setErrorColor(getResources().getColor(R.color.color_red))
+                .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
+                        getResources().getDisplayMetrics()))
+                .buildWithDefaultStyle();
+````
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+- PatternIndicatorView可设置到属性
+````
+this.patternLockerView.setFillColor(getResources().getColor(R.color.color_blue))
+                .setNormalColor(getResources().getColor(R.color.colorWhite))
+                .setHitColor(getResources().getColor(R.color.colorPrimaryDark))
+                .setErrorColor(getResources().getColor(R.color.color_red))
+                .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
+                        getResources().getDisplayMetrics()))
+                .buildWithDefaultStyle();
+````
 
-import com.github.ihsg.patternlocker.OnPatternChangeListener;
-import com.github.ihsg.patternlocker.PatternIndicatorView;
-import com.github.ihsg.patternlocker.PatternLockerView;
-import com.github.ihsg.patternlocker.ResultState;
+### 2. 深度定制
 
-import java.util.List;
+PatternLockerView和PatternIndicatorView均提供了设置连接线、各个小单元控件在不同状态下（正常、设置以及出错）的绘制方式的方法，只需要实现如下几个接口即可，从而可以根据设计需求高度自动定制。
 
-public class PatternSettingActivity extends AppCompatActivity {
+- 正常状态下各个小单元控件的样式（PatternLockerView和PatternIndicatorView通用）
 
-    private PatternLockerView patternLockerView;
-    private PatternIndicatorView patternIndicatorView;
-    private TextView textMsg;
-    private PatternHelper patternHelper;
-
-    public static void startAction(Context context) {
-        Intent intent = new Intent(context, PatternSettingActivity.class);
-        context.startActivity(intent);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pattern_setting);
-
-        this.patternIndicatorView = (PatternIndicatorView) findViewById(R.id.pattern_indicator_view);
-        this.patternLockerView = (PatternLockerView) findViewById(R.id.pattern_lock_view);
-        this.textMsg = (TextView) findViewById(R.id.text_msg);
-
-        this.patternLockerView.setOnPatternChangedListener(new OnPatternChangeListener() {
-            @Override
-            public void onStart(PatternLockerView view) {
-                patternIndicatorView.updateState(null, ResultState.OK);
-            }
-
-            @Override
-            public void onChange(PatternLockerView view, List<Integer> hitList) {
-                patternIndicatorView.updateState(hitList, ResultState.OK);
-            }
-
-            @Override
-            public void onComplete(PatternLockerView view, List<Integer> hitList) {
-                ResultState resultState = isPatternOk(hitList) ? ResultState.OK : ResultState.ERROR;
-                view.setResultState(resultState);
-                patternIndicatorView.updateState(hitList, resultState);
-                updateMsg();
-            }
-
-            @Override
-            public void onClear(PatternLockerView view) {
-//                patternIndicatorView.updateState(null, ResultState.OK);
-                finishIfNeeded();
-            }
-        });
-
-        this.textMsg.setText("设置解锁图案");
-        this.patternHelper = new PatternHelper();
-    }
-
-    private boolean isPatternOk(List<Integer> hitList) {
-        this.patternHelper.validateForSetting(hitList);
-        return this.patternHelper.isOk();
-    }
-
-    private void updateMsg() {
-        this.textMsg.setText(this.patternHelper.getMessage());
-        this.textMsg.setTextColor(this.patternHelper.isOk() ?
-                getResources().getColor(R.color.colorPrimary) :
-                getResources().getColor(R.color.colorAccent));
-    }
-
-    private void finishIfNeeded() {
-        if (this.patternHelper.isFinish()) {
-            finish();
-        }
-    }
+```
+public interface INormalCellView {
+    /**
+     * 绘制正常情况下（即未设置的）每个图案的样式
+     *
+     * @param canvas
+     * @param cellBean the target cell view
+     */
+    void draw(@NonNull Canvas canvas, @NonNull CellBean cellBean);
 }
-````
+```
 
-Step4: 在手势密码验证页添加添加PatternLockerView和PatternIndicatorView（如果需要的化话）自定义控件，并处理相应业务逻辑。
+- 设置时各个小单元控件的样式（PatternLockerView和PatternIndicatorView通用）
 
-### 自定义属性说明
-- PatternLockerView属性
+```
+public interface IHitCellView {
+    /**
+     * 绘制已设置的每个图案的样式
+     *
+     * @param canvas
+     * @param cellBean
+     * @param isError
+     */
+    void draw(@NonNull Canvas canvas, @NonNull CellBean cellBean, boolean isError);
+}
+```
 
-属性名 | 说明 | 默认值
-:----------- | :----------- | :-----------
-plv_color         | 默认图案的颜色        | #2196F3
-plv_hitColor      | 绘制图案的颜色        | #3F51B5
-plv_errorColor    | 绘制图案出错时的颜色   | #F44336
-plv_fillColor     | 图案填充色           | #FAFAFA
-plv_lineWidth     | 连接线线宽           | 1dp
+- PatternLockerView连接线的样式
 
-- PatternIndicatorView属性
+  ```
+  public interface ILockerLinkedLineView {
+      /**
+       * 绘制图案密码连接线
+       *
+       * @param canvas
+       * @param hitList
+       * @param cellBeanList
+       * @param endX
+       * @param endY
+       * @param isError
+       */
+      void draw(@NonNull Canvas canvas,
+                @Nullable List<Integer> hitList,
+                @NonNull List<CellBean> cellBeanList,
+                float endX,
+                float endY,
+                boolean isError);
+  }
+  ```
 
-属性名 | 说明 | 默认值
-:----------- | :----------- | :-----------
-piv_color         | 指示器默认图案的颜色        | #2196F3
-piv_hitColor      | 指示器中选中图案的颜色        | #3F51B5
-piv_errorColor    | 指示器中选中图案出错时的颜色   | #F44336
-piv_lineWidth     | 指示器连接线线宽             | 1dp
+- PatternIndicatorView连接线的样式
 
-> 以上各属性均提供共有方法进行设置和获取。
+```
+public interface IIndicatorLinkedLineView {
+    /**
+     * 绘制指示器连接线
+     *
+     * @param canvas
+     * @param hitList
+     * @param cellBeanList
+     * @param isError
+     */
+    void draw(@NonNull Canvas canvas,
+              @Nullable List<Integer> hitList,
+              @NonNull List<CellBean> cellBeanList,
+              boolean isError);
+}
+```
+
+> 温馨提示：
+>
+> 1、更详细的定制方式可参考demo中以及Library中default开头的代码；
+>
+> 2、如果设置了以上样式，最后需要通过build()方法使设置方法生效

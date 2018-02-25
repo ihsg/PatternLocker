@@ -15,7 +15,7 @@ class Config {
     private static final String DEFAULT_ERROR_COLOR = "#F44336";
     private static final String DEFAULT_FILL_COLOR = "#FFFFFF";
     private static final int DEFAULT_LINE_WIDTH = 1;
-    private static final int DEFAULT_DELAY_TIME = 1000;//ms
+    private static final int DEFAULT_DELAY_TIME = 10000;//ms
 
     public static @ColorInt
     int getDefaultNormalColor() {
