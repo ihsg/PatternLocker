@@ -1,8 +1,8 @@
 ##  Pattern Locker
 
-此为Android App中常用控件之一的图案解锁（手势解锁、手势密码、九宫格密码、九宫格图形锁等）控件开源库，PatternLockerView为主控件，主要负责图案密码的设置和验证，PatternIndicatorView为指示器辅助控件，可根据设计需要选择使用。
+此为Android App中常用控件之一的图案解锁（手势解锁、手势密码、九宫格密码、九宫格图形锁等）控件开源库，PatternLockerView为主控件，负责图案密码的设置和验证，PatternIndicatorView为指示器辅助控件，可根据设计需要选择使用。
 
-由于本人水平有限，如果您在使用的过程中发现bug，或者发现有更好的实现方式和代码中有写得不足的地方，请提issue或者PR，本人万分感激！！！
+由于本人水平有限，如果您在使用的过程中发现bug，或者发现有更好的实现方式和代码中写得不足的地方，请提issue或者PR，本人万分感激！！！
 
 ## 效果图
 ![setting](./captures/captures.jpg)
@@ -22,7 +22,7 @@ allprojects {
 }
 ````
 
-第二步: 打开需要以来此 library 的模块，比如这里我这里是 app 这个 module，添加：
+第二步: 打开需要依赖此 library 的module，比如此demo中是 app 这个 module，添加：
 ````
 dependencies {
     ....
@@ -30,7 +30,7 @@ dependencies {
 }
 ````
 
-第三步: 在布局文件中添加PatternLockViewer和PatternIndicatorView（如果需要的化话）控件，示意如下：
+第三步: 在布局文件中添加PatternLockViewer和PatternIndicatorView（可根据设计需要选择使用）控件，示意如下：
 
 ````
 <?xml version="1.0" encoding="utf-8"?>
@@ -99,10 +99,10 @@ public interface OnPatternChangeListener {
 ### 1. 简单定制   
 可以通过xml和java代码两种方式更改默认颜色、绘制时颜色、出错时颜色、填充色以及连接线粗细
 
-> 推荐使用xml方式，更精简
+> 推荐使用xml方式，更精简，更方便
 
 #### 1.1 xml方式
-- PatternLockerView可设置到属性
+- PatternLockerView可设置的属性
 
 | 属性名            | 说明         | 默认值     |
 | :------------- | :--------- | :------ |
@@ -128,7 +128,7 @@ public interface OnPatternChangeListener {
         app:plv_lineWidth="3dp"/>
 ```
 
-- PatternIndicatorView可设置到属性
+- PatternIndicatorView可设置的属性
 
 | 属性名            | 说明             | 默认值     |
 | :------------- | :------------- | :------ |
@@ -156,18 +156,7 @@ public interface OnPatternChangeListener {
 
 > 注意：设置完一定要调用buildWithDefaultStyle()方法使各个设置生效！！！
 
-- PatternLockerView可设置到属性
-````
-this.patternIndicatorView.setFillColor(getResources().getColor(R.color.color_blue))
-                .setNormalColor(getResources().getColor(R.color.colorWhite))
-                .setHitColor(getResources().getColor(R.color.colorPrimaryDark))
-                .setErrorColor(getResources().getColor(R.color.color_red))
-                .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
-                        getResources().getDisplayMetrics()))
-                .buildWithDefaultStyle();
-````
-
-- PatternIndicatorView可设置到属性
+- PatternLockerView可设置的属性
 ````
 this.patternLockerView.setFillColor(getResources().getColor(R.color.color_blue))
                 .setNormalColor(getResources().getColor(R.color.colorWhite))
@@ -178,9 +167,20 @@ this.patternLockerView.setFillColor(getResources().getColor(R.color.color_blue))
                 .buildWithDefaultStyle();
 ````
 
+- PatternIndicatorView可设置的属性
+````
+this.patternIndicatorView.setFillColor(getResources().getColor(R.color.color_blue))
+                .setNormalColor(getResources().getColor(R.color.colorWhite))
+                .setHitColor(getResources().getColor(R.color.colorPrimaryDark))
+                .setErrorColor(getResources().getColor(R.color.color_red))
+                .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
+                        getResources().getDisplayMetrics()))
+                .buildWithDefaultStyle();
+````
+
 ### 2. 深度定制
 
-PatternLockerView和PatternIndicatorView均提供了设置连接线、各个小单元控件在不同状态下（正常、设置以及出错）的绘制方式的方法，只需要实现如下几个接口即可，从而可以根据设计需求高度自动定制。
+PatternLockerView和PatternIndicatorView均提供了设置连接线、各个小单元控件在不同状态下（正常、设置以及出错）的绘制方式的方法，只需要实现如下几个接口即可，从而可以根据设计需求高度自由定制。
 
 - 正常状态下各个小单元控件的样式（PatternLockerView和PatternIndicatorView通用）
 
