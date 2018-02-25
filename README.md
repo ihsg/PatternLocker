@@ -1,8 +1,8 @@
 ##  Pattern Locker
 
-此为Android App中常用控件之一的图案解锁（手势解锁、手势密码、九宫格密码、九宫格图形锁等）控件开源库，PatternLockerView为主控件，主要负责图案密码的设置，PatternIndicatorView为指示器辅助控件，可根据设计需要选择使用。
+此为Android App中常用控件之一的图案解锁（手势解锁、手势密码、九宫格密码、九宫格图形锁等）控件开源库，PatternLockerView为主控件，主要负责图案密码的设置和验证，PatternIndicatorView为指示器辅助控件，可根据设计需要选择使用。
 
-由于本人水平有限，如果您在使用的过程中发现bug，或者发现有更好的实现方式，或者发现代码中有写得不好的地方，请提issue或者PR，本人万分感激！！！
+由于本人水平有限，如果您在使用的过程中发现bug，或者发现有更好的实现方式和代码中有写得不足的地方，请提issue或者PR，本人万分感激！！！
 
 ## 效果图
 ![setting](./captures/captures.jpg)
@@ -254,7 +254,5 @@ public interface IIndicatorLinkedLineView {
 ```
 
 > 温馨提示：
->
 > 1、更详细的定制方式可参考demo中以及Library中default开头的代码；
->
-> 2、如果设置了以上样式，最后需要通过build()方法使设置方法生效
+> 2、如果设置了以上样式，最后需要通过build()方法使设置方法生效，详见代码。

@@ -1,7 +1,7 @@
 # refer to https://github.com/github/gitignore/blob/master/Android.gitignore
 
 # Built application files
-*.apk
+#*.apk
 *.ap_
 
 # Files for the Dalvik VM
