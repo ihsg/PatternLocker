@@ -262,7 +262,7 @@ public interface IIndicatorLinkedLineView {
 }
 ```
 
-> 温馨提示：
+> 温馨提示：    
 > 1、更详细的定制方式可参考demo中以及Library中default开头的代码；  
 > 2、如果设置了以上样式，最后需要通过build()方法使设置方法生效，详见代码。
 
