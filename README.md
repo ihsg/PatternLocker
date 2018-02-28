@@ -4,9 +4,17 @@
 
 由于本人水平有限，如果您在使用的过程中发现bug，或者发现有更好的实现方式和代码中写得不足的地方，请提issue或者PR，本人万分感激！！！
 
-## 效果图
+## 功能介绍
+- 自定义未各状态下（未操作时、操作时以及操作出错时）线颜色、填充色和线宽；
+- 支持自定义各种状态下（未操作时、操作时以及操作出错时）每个CellView样式和连接线样式；
+- 指示器辅助控件可选择使用；
+- 业务逻辑（至少连点几个点、验证时最多可出错几次等）必须自定义。
+
+## 预览效果图
 ![setting](./captures/captures.jpg)
 
+[点击下载PatternLockerDemo.apk](https://fir.im/qvhx) 或者扫描下方二维码下载安装
+![download](./captures/download_xcode.png)
 
 ## 使用方法
 
@@ -254,5 +262,6 @@ public interface IIndicatorLinkedLineView {
 ```
 
 > 温馨提示：
-> 1、更详细的定制方式可参考demo中以及Library中default开头的代码；
+> 1、更详细的定制方式可参考demo中以及Library中default开头的代码；  
 > 2、如果设置了以上样式，最后需要通过build()方法使设置方法生效，详见代码。
+
