@@ -13,7 +13,8 @@
 ## 预览效果图
 ![setting](./captures/captures.jpg)
 
-[点击下载PatternLockerDemo.apk](https://fir.im/qvhx) 或者扫描下方二维码下载安装
+[点击下载PatternLockerDemo.apk](https://fir.im/qvhx) 或者扫描下方二维码下载安装   
+
 ![download](./captures/download_xcode.png)
 
 ## 使用方法
