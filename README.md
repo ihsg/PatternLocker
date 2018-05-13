@@ -7,6 +7,7 @@
 ## 功能介绍
 - 支持自定义各状态下（未操作时、操作时以及操作出错时）线颜色、填充色和线宽；
 - 支持自定义各种状态下（未操作时、操作时以及操作出错时）每个CellView样式和连接线样式；
+- 支持图案绘制完成后延迟1秒（默认值）自动清除；
 - 支持指示器辅助控件可选择使用；
 - 业务逻辑（至少连点几个点、验证时最多可出错几次等）必须自定义。
 
@@ -35,7 +36,7 @@ allprojects {
 ````
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.0.0'
+    implementation 'com.github.ihsg:PatternLocker:2.1.0'
 }
 ````
 
@@ -120,6 +121,7 @@ public interface OnPatternChangeListener {
 | plv_errorColor | 绘制图案出错时的颜色 | #F44336 |
 | plv_fillColor  | 图案填充色      | #FFFFFF |
 | plv_lineWidth  | 连接线线宽      | 1dp     |
+| plv_enableAutoClean  | 自动清除绘制图案      | true     |
 
 示例如下：
 ```
