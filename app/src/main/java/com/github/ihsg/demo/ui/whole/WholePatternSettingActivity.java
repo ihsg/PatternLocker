@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.github.ihsg.demo.R;
@@ -70,6 +71,13 @@ public class WholePatternSettingActivity extends AppCompatActivity {
 
         this.textMsg.setText("设置解锁图案");
         this.patternHelper = new PatternHelper();
+
+        findViewById(R.id.btn_clean).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                patternLockerView.clearHitState();
+            }
+        });
     }
 
     private boolean isPatternOk(List<Integer> hitList) {

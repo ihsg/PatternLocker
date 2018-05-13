@@ -16,6 +16,7 @@ class Config {
     private static final String DEFAULT_FILL_COLOR = "#FFFFFF";
     private static final int DEFAULT_LINE_WIDTH = 1;
     private static final int DEFAULT_DELAY_TIME = 1000;//ms
+    private static final boolean DEFAULT_ENABLE_AUTO_CLEAN = true;
 
     public static @ColorInt
     int getDefaultNormalColor() {
@@ -43,6 +44,10 @@ class Config {
 
     public static int getDefaultDelayTime() {
         return DEFAULT_DELAY_TIME;
+    }
+
+    public static boolean getDefaultEnableAutoClean() {
+        return DEFAULT_ENABLE_AUTO_CLEAN;
     }
 
     public static Paint createPaint() {

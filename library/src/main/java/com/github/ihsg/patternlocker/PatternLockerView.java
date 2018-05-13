@@ -29,6 +29,7 @@ public class PatternLockerView extends View {
     private @ColorInt
     int fillColor;
     private float lineWidth;
+    private boolean enableAutoClean;
 
     private float endX;
     private float endY;
@@ -239,6 +240,7 @@ public class PatternLockerView extends View {
         this.errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, Config.getDefaultErrorColor());
         this.fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.getDefaultFillColor());
         this.lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getDefaultLineWidth(getResources()));
+        this.enableAutoClean = ta.getBoolean(R.styleable.PatternLockerView_plv_enableAutoClean, Config.getDefaultEnableAutoClean());
 
         ta.recycle();
 
@@ -327,7 +329,7 @@ public class PatternLockerView extends View {
         }
 
         //3. startTimer if needed
-        if (this.hitList.size() > 0) {
+        if (this.enableAutoClean && this.hitList.size() > 0) {
             startTimer();
         }
     }
