@@ -24,8 +24,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation project(':library')
-    implementation "com.github.ihsg:PatternLocker:$rootProject.ext.versionName"
+    implementation project(':library')
+//    implementation "com.github.ihsg:PatternLocker:$rootProject.ext.versionName"
 
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"

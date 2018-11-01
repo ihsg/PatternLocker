@@ -1,0 +1,54 @@
+package com.github.ihsg.patternlocker
+
+import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.Paint
+import android.support.annotation.ColorInt
+import android.util.TypedValue
+
+/**
+ * Created by hsg on 23/09/2017.
+ */
+internal object Config {
+    private const val DEFAULT_NORMAL_COLOR = "#2196F3"
+    private const val DEFAULT_HIT_COLOR = "#3F51B5"
+    private const val DEFAULT_ERROR_COLOR = "#F44336"
+    private const val DEFAULT_FILL_COLOR = "#FFFFFF"
+    private const val DEFAULT_LINE_WIDTH = 1
+
+    const val defaultDelayTime = 1000//ms
+    const val defaultEnableAutoClean = true
+
+    val defaultNormalColor: Int
+        @ColorInt
+        get() = Color.parseColor(DEFAULT_NORMAL_COLOR)
+
+    val defaultHitColor: Int
+        @ColorInt
+        get() = Color.parseColor(DEFAULT_HIT_COLOR)
+
+    val defaultErrorColor: Int
+        @ColorInt
+        get() = Color.parseColor(DEFAULT_ERROR_COLOR)
+
+    val defaultFillColor: Int
+        @ColorInt
+        get() = Color.parseColor(DEFAULT_FILL_COLOR)
+
+    fun getDefaultLineWidth(resources: Resources): Float {
+        return convertDpToPx(DEFAULT_LINE_WIDTH.toFloat(), resources)
+    }
+
+    fun createPaint(): Paint {
+        val paint = Paint()
+        paint.isDither = true
+        paint.isAntiAlias = true
+        paint.strokeJoin = Paint.Join.ROUND
+        paint.strokeCap = Paint.Cap.ROUND
+        return paint
+    }
+
+    private fun convertDpToPx(dp: Float, resources: Resources): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+    }
+}
