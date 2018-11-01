@@ -12,7 +12,7 @@
 - 业务逻辑（至少连点几个点、验证时最多可出错几次等）必须自定义。
 
 ## 预览效果图
-![setting](./captures/captures.jpg)
+![setting](./captures/captures.png)
 
 [点击下载PatternLockerDemo.apk](https://fir.im/qvhx) 或者扫描下方二维码下载安装   
 
