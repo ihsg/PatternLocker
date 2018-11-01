@@ -26,7 +26,7 @@
 ````
 allprojects {
     repositories {
-        jcenter()
+        ...
         maven { url "https://jitpack.io" }
     }
 }
@@ -36,7 +36,7 @@ allprojects {
 ````
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.1.0'
+    implementation 'com.github.ihsg:PatternLocker:2.2.0'
 }
 ````
 
@@ -72,36 +72,36 @@ dependencies {
 ````
 第四步: 在java代码中为PatternLockerView添加OnPatternChangeListener并处理相应业务逻辑，OnPatternChangeListener接口说明如下：
 ````
-public interface OnPatternChangeListener {
+interface OnPatternChangeListener {
     /**
      * 开始绘制图案时（即手指按下触碰到绘画区域时）会调用该方法
      *
      * @param view
      */
-    void onStart(PatternLockerView view);
+    fun onStart(view: PatternLockerView)
 
     /**
      * 图案绘制改变时（即手指在绘画区域移动时）会调用该方法，请注意只有 @param hitList改变了才会触发此方法
      *
      * @param view
-     * @param hitList
+     * @param hitIndexList
      */
-    void onChange(PatternLockerView view, List<Integer> hitList);
+    fun onChange(view: PatternLockerView, hitIndexList: List<Int>)
 
     /**
      * 图案绘制完成时（即手指抬起离开绘画区域时）会调用该方法
      *
      * @param view
-     * @param hitList
+     * @param hitIndexList
      */
-    void onComplete(PatternLockerView view, List<Integer> hitList);
+    fun onComplete(view: PatternLockerView, hitIndexList: List<Int>)
 
     /**
      * 已绘制的图案被清除时会调用该方法
      *
      * @param view
      */
-    void onClear(PatternLockerView view);
+    fun onClear(view: PatternLockerView)
 }
 ````
 ## 自由定制
@@ -196,21 +196,21 @@ PatternLockerView和PatternIndicatorView均提供了设置连接线、各个小�
 - 正常状态下各个小单元控件的样式（PatternLockerView和PatternIndicatorView通用）
 
 ```
-public interface INormalCellView {
+interface INormalCellView {
     /**
      * 绘制正常情况下（即未设置的）每个图案的样式
      *
      * @param canvas
      * @param cellBean the target cell view
      */
-    void draw(@NonNull Canvas canvas, @NonNull CellBean cellBean);
+    fun draw(canvas: Canvas, cellBean: CellBean)
 }
 ```
 
 - 设置时各个小单元控件的样式（PatternLockerView和PatternIndicatorView通用）
 
 ```
-public interface IHitCellView {
+interface IHitCellView {
     /**
      * 绘制已设置的每个图案的样式
      *
@@ -218,49 +218,49 @@ public interface IHitCellView {
      * @param cellBean
      * @param isError
      */
-    void draw(@NonNull Canvas canvas, @NonNull CellBean cellBean, boolean isError);
+    fun draw(canvas: Canvas, cellBean: CellBean, isError: Boolean)
 }
 ```
 
 - PatternLockerView连接线的样式
 
-  ```
-  public interface ILockerLinkedLineView {
-      /**
-       * 绘制图案密码连接线
-       *
-       * @param canvas
-       * @param hitList
-       * @param cellBeanList
-       * @param endX
-       * @param endY
-       * @param isError
-       */
-      void draw(@NonNull Canvas canvas,
-                @Nullable List<Integer> hitList,
-                @NonNull List<CellBean> cellBeanList,
-                float endX,
-                float endY,
-                boolean isError);
-  }
-  ```
+```
+interface ILockerLinkedLineView {
+    /**
+     * 绘制图案密码连接线
+     *
+     * @param canvas
+     * @param hitIndexList
+     * @param cellBeanList
+     * @param endX
+     * @param endY
+     * @param isError
+     */
+    fun draw(canvas: Canvas,
+             hitIndexList: List<Int>,
+             cellBeanList: List<CellBean>,
+             endX: Float,
+             endY: Float,
+             isError: Boolean)
+}
+```
 
 - PatternIndicatorView连接线的样式
 
 ```
-public interface IIndicatorLinkedLineView {
+interface IIndicatorLinkedLineView {
     /**
      * 绘制指示器连接线
      *
      * @param canvas
-     * @param hitList
+     * @param hitIndexList
      * @param cellBeanList
      * @param isError
      */
-    void draw(@NonNull Canvas canvas,
-              @Nullable List<Integer> hitList,
-              @NonNull List<CellBean> cellBeanList,
-              boolean isError);
+    fun draw(canvas: Canvas,
+             hitIndexList: List<Int>,
+             cellBeanList: List<CellBean>,
+             isError: Boolean)
 }
 ```
 
