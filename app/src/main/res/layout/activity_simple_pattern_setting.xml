@@ -11,7 +11,7 @@
         app:title="@string/title_pattern_setting" />
 
     <TextView
-        android:id="@+id/text_msg"
+        android:id="@+id/textMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -22,7 +22,7 @@
         android:textSize="16dp" />
 
     <com.github.ihsg.patternlocker.PatternIndicatorView
-        android:id="@+id/pattern_indicator_view"
+        android:id="@+id/patternIndicatorView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
@@ -34,7 +34,7 @@
         app:plv_lineWidth="2dp"/>
 
     <com.github.ihsg.patternlocker.PatternLockerView
-        android:id="@+id/pattern_lock_view"
+        android:id="@+id/patternLockerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="50dp"

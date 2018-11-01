@@ -20,11 +20,11 @@ public class PatternHelper {
     private boolean isFinish;
     private boolean isOk;
 
-    public void validateForSetting(List<Integer> hitList) {
+    public void validateForSetting(List<Integer> hitIndexList) {
         this.isFinish = false;
         this.isOk = false;
 
-        if ((hitList == null) || (hitList.size() < MAX_SIZE)) {
+        if ((hitIndexList == null) || (hitIndexList.size() < MAX_SIZE)) {
             this.tmpPwd = null;
             this.message = getSizeErrorMsg();
             return;
@@ -32,14 +32,14 @@ public class PatternHelper {
 
         //1. draw first time
         if (TextUtils.isEmpty(this.tmpPwd)) {
-            this.tmpPwd = convert2String(hitList);
+            this.tmpPwd = convert2String(hitIndexList);
             this.message = getReDrawMsg();
             this.isOk = true;
             return;
         }
 
         //2. draw second times
-        if (this.tmpPwd.equals(convert2String(hitList))) {
+        if (this.tmpPwd.equals(convert2String(hitIndexList))) {
             this.message = getSettingSuccessMsg();
             saveToStorage(this.tmpPwd);
             this.isOk = true;
@@ -50,10 +50,10 @@ public class PatternHelper {
         }
     }
 
-    public void validateForChecking(List<Integer> hitList) {
+    public void validateForChecking(List<Integer> hitIndexList) {
         this.isOk = false;
 
-        if ((hitList == null) || (hitList.size() < MAX_SIZE)) {
+        if ((hitIndexList == null) || (hitIndexList.size() < MAX_SIZE)) {
             this.times++;
             this.isFinish = this.times >= MAX_SIZE;
             this.message = getPwdErrorMsg();
@@ -61,7 +61,7 @@ public class PatternHelper {
         }
 
         this.storagePwd = getFromStorage();
-        if (!TextUtils.isEmpty(this.storagePwd) && this.storagePwd.equals(convert2String(hitList))) {
+        if (!TextUtils.isEmpty(this.storagePwd) && this.storagePwd.equals(convert2String(hitIndexList))) {
             this.message = getCheckingSuccessMsg();
             this.isOk = true;
             this.isFinish = true;
@@ -108,8 +108,8 @@ public class PatternHelper {
         return String.format("密码错误，还剩%d次机会", getRemainTimes());
     }
 
-    private String convert2String(List<Integer> hitList) {
-        return hitList.toString();
+    private String convert2String(List<Integer> hitIndexList) {
+        return hitIndexList.toString();
     }
 
     private void saveToStorage(String gesturePwd) {

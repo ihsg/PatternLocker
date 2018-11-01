@@ -12,7 +12,6 @@ import android.view.View
  */
 
 class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
-
     @ColorInt
     private var normalColor: Int = 0
     @ColorInt
@@ -21,9 +20,7 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     private var hitColor: Int = 0
     @ColorInt
     private var errorColor: Int = 0
-
     private var lineWidth: Float = 0f
-
     private var isError: Boolean = false
     private val hitIndexList: ArrayList<Int> by lazy {
         ArrayList<Int>()

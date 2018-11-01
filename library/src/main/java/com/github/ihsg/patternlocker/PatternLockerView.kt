@@ -30,7 +30,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private val cellBeanList: ArrayList<CellBean> by lazy {
         CellFactory(width, height).cellBeanList
     }
-    private val hitList: ArrayList<Int> by lazy {
+    private val hitIndexList: ArrayList<Int> by lazy {
         ArrayList<Int>()
     }
     private var listener: OnPatternChangeListener? = null
@@ -243,9 +243,9 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun drawLinkedLine(canvas: Canvas) {
-        if (!this.hitList.isEmpty() && getLinkedLineView() != null) {
+        if (!this.hitIndexList.isEmpty() && getLinkedLineView() != null) {
             getLinkedLineView()!!.draw(canvas,
-                    this.hitList,
+                    this.hitIndexList,
                     this.cellBeanList,
                     this.endX,
                     this.endY,
@@ -293,10 +293,10 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         this.endY = event.y
 
         //3. notify listener if needed
-        val size = this.hitList.size
+        val size = this.hitIndexList.size
         if (this.hitSize != size) {
             this.hitSize = size
-            this.listener?.onChange(this, this.hitList)
+            this.listener?.onChange(this, this.hitIndexList)
         }
     }
 
@@ -309,11 +309,11 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         this.endY = 0f
 
         //3. notify listener
-        this.listener?.onComplete(this, this.hitList)
+        this.listener?.onComplete(this, this.hitIndexList)
 
 
         //4. startTimer if needed
-        if (this.enableAutoClean && this.hitList.size > 0) {
+        if (this.enableAutoClean && this.hitIndexList.size > 0) {
             startTimer()
         }
     }
@@ -323,7 +323,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
             for (c in this.cellBeanList) {
                 if (!c.isHit && c.of(event.x, event.y)) {
                     c.isHit = true
-                    this.hitList.add(c.id)
+                    this.hitIndexList.add(c.id)
                 }
             }
         }
@@ -331,10 +331,10 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private fun clearHitData() {
         synchronized(this) {
-            for (i in this.hitList) {
-                this.cellBeanList[hitList[i]].isHit = false
+            for (i in this.hitIndexList) {
+                this.cellBeanList[i].isHit = false
             }
-            this.hitList.clear()
+            this.hitIndexList.clear()
             this.hitSize = 0
         }
 

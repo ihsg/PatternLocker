@@ -9,17 +9,17 @@
         app:title="@string/title_simple_style" />
 
     <Button
-        android:id="@+id/btn_setting"
+        android:id="@+id/btnSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/title_pattern_setting" />
 
     <Button
-        android:id="@+id/btn_checking"
+        android:id="@+id/btnChecking"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_setting"
+        android:layout_below="@id/btnSetting"
         android:text="@string/title_pattern_checking" />
 
 </RelativeLayout>

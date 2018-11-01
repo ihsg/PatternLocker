@@ -4,7 +4,7 @@ package com.github.ihsg.patternlocker
  * Created by hsg on 20/09/2017.
  */
 
-class CellBean(var id: Int, var x: Float, var y: Float, var radius: Float) {
+class CellBean(val id: Int, val x: Float, val y: Float, val radius: Float) {
     var isHit: Boolean = false
 
     /**

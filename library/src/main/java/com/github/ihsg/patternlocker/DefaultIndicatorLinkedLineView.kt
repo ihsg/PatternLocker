@@ -65,7 +65,7 @@ class DefaultIndicatorLinkedLineView : IIndicatorLinkedLineView {
         path.moveTo(first.x, first.y)
 
         for (i in hitIndexList) {
-            val c = cellBeanList[hitIndexList[i]]
+            val c = cellBeanList[i]
             path.lineTo(c.x, c.y)
         }
 

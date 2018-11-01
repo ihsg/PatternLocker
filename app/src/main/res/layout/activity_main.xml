@@ -23,19 +23,19 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btn_default"
+                android:id="@+id/btnDefault"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/title_default_style" />
 
             <Button
-                android:id="@+id/btn_simple"
+                android:id="@+id/btnSimple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/title_simple_style" />
 
             <Button
-                android:id="@+id/btn_whole"
+                android:id="@+id/btnWhole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/title_whole_style" />
