@@ -16,18 +16,28 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+    signingConfigs {
+        myConfig {
+            storeFile file("keystore.jks")
+            storePassword "654321"
+            keyAlias "Pattern"
+            keyPassword "654321"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myConfig
         }
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':library')
-//    implementation "com.github.ihsg:PatternLocker:$rootProject.ext.versionName"
+//    implementation project(':library')
+    implementation "com.github.ihsg:PatternLocker:$rootProject.ext.versionName"
 
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
