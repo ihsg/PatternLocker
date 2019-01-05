@@ -22,10 +22,10 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     private var errorColor: Int = 0
     private var lineWidth: Float = 0f
     private var isError: Boolean = false
-    private val hitIndexList: ArrayList<Int> by lazy {
-        ArrayList<Int>()
+    private val hitIndexList: MutableList<Int> by lazy {
+        mutableListOf<Int>()
     }
-    private val cellBeanList: ArrayList<CellBean> by lazy {
+    private val cellBeanList: List<CellBean> by lazy {
         val w = width - paddingLeft - paddingRight
         val h = height - paddingTop - paddingBottom
         CellFactory(w, h).cellBeanList
@@ -150,22 +150,23 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     fun updateState(hitIndexList: List<Int>?, isError: Boolean) {
         //1. reset to default state
         if (!this.hitIndexList.isEmpty()) {
-            for (i in this.hitIndexList) {
-                this.cellBeanList[i].isHit = false
-            }
             this.hitIndexList.clear()
+        }
+        this.cellBeanList.forEach {
+            it.isHit = false
         }
 
         //2. update hit state
-        if (hitIndexList != null) {
+        if (hitIndexList != null && !hitIndexList.isEmpty()) {
             this.hitIndexList.addAll(hitIndexList)
-        }
 
-        if (!this.hitIndexList.isEmpty()) {
-            for (i in this.hitIndexList) {
-                this.cellBeanList[i].isHit = true
+            this.hitIndexList.forEach {
+                if (0 <= it && it < this.cellBeanList.size) {
+                    this.cellBeanList[it].isHit = true
+                }
             }
         }
+
 
         //3. update result
         this.isError = isError
@@ -232,11 +233,11 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
             return
         }
 
-        for (item in this.cellBeanList) {
-            if (item.isHit) {
-                this.getHitCellView()!!.draw(canvas, item, this.isError)
+        this.cellBeanList.forEach {
+            if (it.isHit) {
+                this.getHitCellView()!!.draw(canvas, it, this.isError)
             } else {
-                this.getNormalCellView()!!.draw(canvas, item)
+                this.getNormalCellView()!!.draw(canvas, it)
             }
         }
     }

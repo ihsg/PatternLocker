@@ -62,9 +62,11 @@ class DefaultLockerLinkedLineView : ILockerLinkedLineView {
         val first = cellBeanList[hitIndexList[0]]
         path.moveTo(first.x, first.y)
 
-        for (i in  hitIndexList) {
-            val c = cellBeanList[i]
-            path.lineTo(c.x, c.y)
+        hitIndexList.forEach {
+            if (0 <= it && it < cellBeanList.size) {
+                val c = cellBeanList[it]
+                path.lineTo(c.x, c.y)
+            }
         }
 
         if ((endX != 0f || endY != 0f) && hitIndexList.size < 9) {

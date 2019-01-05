@@ -27,11 +27,11 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private var hitSize: Int = 0
     private var isError: Boolean = false
     private var enableAutoClean: Boolean = false
-    private val cellBeanList: ArrayList<CellBean> by lazy {
+    private val cellBeanList: List<CellBean> by lazy {
         CellFactory(width, height).cellBeanList
     }
-    private val hitIndexList: ArrayList<Int> by lazy {
-        ArrayList<Int>()
+    private val hitIndexList: MutableList<Int> by lazy {
+        mutableListOf<Int>()
     }
     private var listener: OnPatternChangeListener? = null
     private var linkedLineView: ILockerLinkedLineView? = null
@@ -264,11 +264,11 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
             return
         }
 
-        for (item in this.cellBeanList) {
-            if (item.isHit) {
-                getHitCellView()!!.draw(canvas, item, this.isError)
+        this.cellBeanList.forEach {
+            if (it.isHit) {
+                getHitCellView()!!.draw(canvas, it, this.isError)
             } else {
-                getNormalCellView()!!.draw(canvas, item)
+                getNormalCellView()!!.draw(canvas, it)
             }
         }
     }
@@ -320,10 +320,10 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private fun updateHitState(event: MotionEvent) {
         synchronized(this) {
-            for (c in this.cellBeanList) {
-                if (!c.isHit && c.of(event.x, event.y)) {
-                    c.isHit = true
-                    this.hitIndexList.add(c.id)
+            this.cellBeanList.forEach {
+                if (!it.isHit && it.of(event.x, event.y)) {
+                    it.isHit = true
+                    this.hitIndexList.add(it.id)
                 }
             }
         }
@@ -331,13 +331,12 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private fun clearHitData() {
         synchronized(this) {
-            for (i in this.hitIndexList) {
-                this.cellBeanList[i].isHit = false
+            if (!this.hitIndexList.isEmpty()) {
+                this.hitIndexList.clear()
+                this.hitSize = 0
+                this.cellBeanList.forEach { it.isHit = false }
             }
-            this.hitIndexList.clear()
-            this.hitSize = 0
         }
-
     }
 
     override fun onDetachedFromWindow() {

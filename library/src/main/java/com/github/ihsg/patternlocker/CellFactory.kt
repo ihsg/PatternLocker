@@ -5,7 +5,7 @@ package com.github.ihsg.patternlocker
  */
 
 internal class CellFactory(private val width: Int, private val height: Int) {
-    val cellBeanList: ArrayList<CellBean> by lazy {
+    val cellBeanList: List<CellBean> by lazy {
         val result = ArrayList<CellBean>()
 
         val pWidth = this.width / 8f
@@ -20,6 +20,6 @@ internal class CellFactory(private val width: Int, private val height: Int) {
                         pWidth))
             }
         }
-        return@lazy result
+        return@lazy result.toList()
     }
 }

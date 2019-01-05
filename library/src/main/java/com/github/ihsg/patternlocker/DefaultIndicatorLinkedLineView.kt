@@ -64,9 +64,11 @@ class DefaultIndicatorLinkedLineView : IIndicatorLinkedLineView {
         val path = Path()
         path.moveTo(first.x, first.y)
 
-        for (i in hitIndexList) {
-            val c = cellBeanList[i]
-            path.lineTo(c.x, c.y)
+        hitIndexList.forEach {
+            if(0 <= it && it < cellBeanList.size){
+                val c = cellBeanList[it]
+                path.lineTo(c.x, c.y)
+            }
         }
 
         this.paint.color = this.getColor(isError)
