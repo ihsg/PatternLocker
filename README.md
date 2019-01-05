@@ -36,7 +36,7 @@ allprojects {
 ````
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.2.1'
+    implementation 'com.github.ihsg:PatternLocker:2.2.2'
 }
 ````
 
