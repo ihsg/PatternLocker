@@ -20,6 +20,6 @@ internal class CellFactory(private val width: Int, private val height: Int) {
                         pWidth))
             }
         }
-        return@lazy result.toList()
+        return@lazy result
     }
 }

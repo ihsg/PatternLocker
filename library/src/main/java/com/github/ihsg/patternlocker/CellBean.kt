@@ -14,9 +14,10 @@ class CellBean(val id: Int, val x: Float, val y: Float, val radius: Float) {
      * @param y
      * @return
      */
-    fun of(x: Float, y: Float): Boolean {
+    fun of(x: Float, y: Float, canSkip: Boolean): Boolean {
         val dx = this.x - x
         val dy = this.y - y
-        return Math.sqrt((dx * dx + dy * dy).toDouble()) <= this.radius
+        val r = if (canSkip) this.radius else this.radius * 1.5f
+        return Math.sqrt((dx * dx + dy * dy).toDouble()) <= r.toDouble()
     }
 }

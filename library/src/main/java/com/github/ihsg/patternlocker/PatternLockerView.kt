@@ -27,6 +27,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private var hitSize: Int = 0
     private var isError: Boolean = false
     private var enableAutoClean: Boolean = false
+    private var canSkip: Boolean = false
     private val cellBeanList: List<CellBean> by lazy {
         CellFactory(width, height).cellBeanList
     }
@@ -183,7 +184,6 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
         drawLinkedLine(canvas)
         drawCells(canvas)
     }
@@ -228,6 +228,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         this.fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.defaultFillColor)
         this.lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getDefaultLineWidth(resources))
         this.enableAutoClean = ta.getBoolean(R.styleable.PatternLockerView_plv_enableAutoClean, Config.defaultEnableAutoClean)
+        this.canSkip = ta.getBoolean(R.styleable.PatternLockerView_plv_canSkip, Config.defaultCanSkip)
 
         ta.recycle()
 
@@ -319,24 +320,21 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun updateHitState(event: MotionEvent) {
-        synchronized(this) {
-            this.cellBeanList.forEach {
-                if (!it.isHit && it.of(event.x, event.y)) {
-                    it.isHit = true
-                    this.hitIndexList.add(it.id)
-                }
+        this.cellBeanList.forEach {
+            if (!it.isHit && it.of(event.x, event.y, this.canSkip)) {
+                it.isHit = true
+                this.hitIndexList.add(it.id)
             }
         }
     }
 
     private fun clearHitData() {
-        synchronized(this) {
-            if (!this.hitIndexList.isEmpty()) {
-                this.hitIndexList.clear()
-                this.hitSize = 0
-                this.cellBeanList.forEach { it.isHit = false }
-            }
+        if (!this.hitIndexList.isEmpty()) {
+            this.hitIndexList.clear()
+            this.hitSize = 0
+            this.cellBeanList.forEach { it.isHit = false }
         }
+
     }
 
     override fun onDetachedFromWindow() {
