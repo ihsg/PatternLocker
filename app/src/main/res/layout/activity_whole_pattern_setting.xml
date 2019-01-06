@@ -38,8 +38,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="50dp"
+        app:plv_canSkip="true"
         app:plv_color="@color/color_gray"
         app:plv_enableAutoClean="false"
         app:plv_errorColor="@color/color_red"
@@ -51,5 +52,5 @@
         android:id="@+id/btn_clean"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="clean"/>
+        android:text="clean" />
 </LinearLayout>

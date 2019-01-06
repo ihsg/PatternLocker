@@ -8,6 +8,7 @@
 - 支持自定义各状态下（未操作时、操作时以及操作出错时）线颜色、填充色和线宽；
 - 支持自定义各种状态下（未操作时、操作时以及操作出错时）每个CellView样式和连接线样式；
 - 支持图案绘制完成后延迟1秒（默认值）自动清除；
+- 支持是否跳过中间点（默认不跳过）
 - 支持指示器辅助控件可选择使用；
 - 业务逻辑（至少连点几个点、验证时最多可出错几次等）必须自定义。
 
@@ -36,7 +37,7 @@ allprojects {
 ````
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.2.3'
+    implementation 'com.github.ihsg:PatternLocker:2.3.0'
 }
 ````
 
@@ -115,28 +116,30 @@ interface OnPatternChangeListener {
 - PatternLockerView可设置的属性
 
 | 属性名            | 说明         | 默认值     |
-| :------------- | :--------- | :------ |
+| :------------- | :--------: | :-----: |
 | plv_color      | 默认图案的颜色    | #2196F3 |
 | plv_hitColor   | 绘制图案的颜色    | #3F51B5 |
 | plv_errorColor | 绘制图案出错时的颜色 | #F44336 |
 | plv_fillColor  | 图案填充色      | #FFFFFF |
 | plv_lineWidth  | 连接线线宽      | 1dp     |
 | plv_enableAutoClean  | 自动清除绘制图案      | true     |
-
+| plv_canSkip | 是否跳过中间点 | false |
 示例如下：
 ```
 <com.github.ihsg.patternlocker.PatternLockerView
-        android:id="@+id/pattern_lock_view"
+        android:id="@+id/patternLockerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
         android:layout_marginTop="20dp"
-        app:plv_color="@color/colorWhite"
-        app:plv_hitColor="@color/colorPrimaryDark"
-        app:plv_fillColor="@color/color_blue"
+        android:layout_marginRight="50dp"
+        app:plv_canSkip="true"
+        app:plv_color="@color/color_gray"
+        app:plv_enableAutoClean="false"
         app:plv_errorColor="@color/color_red"
-        app:plv_lineWidth="3dp"/>
+        app:plv_fillColor="@color/colorWhite"
+        app:plv_hitColor="@color/colorPrimary"
+        app:plv_lineWidth="3dp" />
 ```
 
 - PatternIndicatorView可设置的属性
