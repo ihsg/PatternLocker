@@ -58,16 +58,18 @@ class DefaultIndicatorLinkedLineView : IIndicatorLinkedLineView {
         }
 
         val saveCount = canvas.save()
-
-        val first = cellBeanList[hitIndexList[0]]
-
         val path = Path()
-        path.moveTo(first.x, first.y)
+        var first = true
 
         hitIndexList.forEach {
-            if(0 <= it && it < cellBeanList.size){
+            if (0 <= it && it < cellBeanList.size) {
                 val c = cellBeanList[it]
-                path.lineTo(c.x, c.y)
+                if (first) {
+                    path.moveTo(c.x, c.y)
+                    first = false
+                } else {
+                    path.lineTo(c.x, c.y)
+                }
             }
         }
 

@@ -56,16 +56,18 @@ class DefaultLockerLinkedLineView : ILockerLinkedLineView {
         }
 
         val saveCount = canvas.save()
-
         val path = Path()
-
-        val first = cellBeanList[hitIndexList[0]]
-        path.moveTo(first.x, first.y)
+        var first = true
 
         hitIndexList.forEach {
             if (0 <= it && it < cellBeanList.size) {
                 val c = cellBeanList[it]
-                path.lineTo(c.x, c.y)
+                if (first) {
+                    path.moveTo(c.x, c.y)
+                    first = false
+                } else {
+                    path.lineTo(c.x, c.y)
+                }
             }
         }
 
