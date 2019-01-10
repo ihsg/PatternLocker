@@ -31,11 +31,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private var enableAutoClean: Boolean = false
     private var canSkip: Boolean = false
     private var enableHapticFeedback: Boolean = false
-    private val cellBeanList: List<CellBean> by lazy {
-        val w = this.width - this.paddingLeft - this.paddingRight
-        val h = this.height - this.paddingTop - this.paddingBottom
-        return@lazy CellFactory(w, h).cellBeanList
-    }
+    private lateinit var cellBeanList: List<CellBean>
     private val hitIndexList: MutableList<Int> by lazy {
         mutableListOf<Int>()
     }
@@ -50,7 +46,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     init {
-        this.init(context, attrs, defStyleAttr)
+        this.initAttrs(context, attrs, defStyleAttr)
+        this.initData()
     }
 
     fun enableDebug() {
@@ -193,6 +190,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     override fun onDraw(canvas: Canvas) {
+        this.initCellBeanList()
         drawLinkedLine(canvas)
         drawCells(canvas)
     }
@@ -223,11 +221,6 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         return if (isHandle) true else super.onTouchEvent(event)
     }
 
-    private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
-        this.initAttrs(context, attrs, defStyleAttr)
-        this.initData()
-    }
-
     private fun initAttrs(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.PatternLockerView, defStyleAttr, 0)
 
@@ -250,9 +243,17 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun initData() {
+        Logger.enable = Config.defaultEnableLogger
         this.buildWithDefaultStyle()
         this.hitIndexList.clear()
-        Logger.enable = Config.defaultEnableLogger
+    }
+
+    private fun initCellBeanList() {
+        if (!this::cellBeanList.isInitialized){
+            val w = this.width - this.paddingLeft - this.paddingRight
+            val h = this.height - this.paddingTop - this.paddingBottom
+            this.cellBeanList = CellFactory(w, h).cellBeanList
+        }
     }
 
     private fun drawLinkedLine(canvas: Canvas) {
@@ -375,7 +376,6 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         if (Logger.enable) {
             Logger.d(TAG, "cellBeanList = ${this.cellBeanList}, hitIndexList = ${this.hitIndexList}")
         }
-
     }
 
     companion object {
