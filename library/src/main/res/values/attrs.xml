@@ -16,5 +16,6 @@
         <attr name="plv_lineWidth" format="dimension|reference" />
         <attr name="plv_enableAutoClean" format="boolean|reference" />
         <attr name="plv_canSkip" format="boolean|reference" />
+        <attr name="plv_enableHapticFeedback" format="boolean|reference" />
     </declare-styleable>
 </resources>

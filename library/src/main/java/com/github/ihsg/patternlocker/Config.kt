@@ -18,6 +18,7 @@ internal object Config {
 
     const val defaultDelayTime = 1000//ms
     const val defaultEnableAutoClean = true
+    const val defaultEnableHapticFeedback = false
     const val defaultCanSkip = false
 
     val defaultNormalColor: Int

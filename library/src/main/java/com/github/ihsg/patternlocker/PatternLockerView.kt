@@ -5,8 +5,10 @@ import android.graphics.Canvas
 import android.support.annotation.ColorInt
 import android.util.AttributeSet
 import android.util.Log
+import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
+
 
 /**
  * Created by hsg on 20/09/2017.
@@ -28,6 +30,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private var isError: Boolean = false
     private var enableAutoClean: Boolean = false
     private var canSkip: Boolean = false
+    private var enableHapticFeedback: Boolean = false
     private val cellBeanList: List<CellBean> by lazy {
         CellFactory(width, height).cellBeanList
     }
@@ -228,6 +231,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         this.fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.defaultFillColor)
         this.lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getDefaultLineWidth(resources))
         this.enableAutoClean = ta.getBoolean(R.styleable.PatternLockerView_plv_enableAutoClean, Config.defaultEnableAutoClean)
+        this.enableHapticFeedback = ta.getBoolean(R.styleable.PatternLockerView_plv_enableHapticFeedback, Config.defaultEnableHapticFeedback)
         this.canSkip = ta.getBoolean(R.styleable.PatternLockerView_plv_canSkip, Config.defaultCanSkip)
 
         ta.recycle()
@@ -324,6 +328,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
             if (!it.isHit && it.of(event.x, event.y, this.canSkip)) {
                 it.isHit = true
                 this.hitIndexList.add(it.id)
+                this.hapticFeedback()
             }
         }
     }
@@ -346,6 +351,14 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private fun startTimer() {
         isEnabled = false
         this.postDelayed(this.action, Config.defaultDelayTime.toLong())
+    }
+
+    private fun hapticFeedback() {
+        if (this.enableHapticFeedback) {
+            this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,
+                    HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
+                            or HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+        }
     }
 
     companion object {
