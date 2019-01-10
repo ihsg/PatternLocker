@@ -32,10 +32,9 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private var canSkip: Boolean = false
     private var enableHapticFeedback: Boolean = false
     private val cellBeanList: List<CellBean> by lazy {
-        this.paddingStart
         val w = this.width - this.paddingLeft - this.paddingRight
         val h = this.height - this.paddingTop - this.paddingBottom
-        CellFactory(w, h).cellBeanList
+        return@lazy CellFactory(w, h).cellBeanList
     }
     private val hitIndexList: MutableList<Int> by lazy {
         mutableListOf<Int>()

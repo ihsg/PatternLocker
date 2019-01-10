@@ -4,8 +4,8 @@ buildscript {
 
     // versions
     ext {
-        versionCode = 10
-        versionName = '2.4.1'
+        versionCode = 11
+        versionName = '2.4.2'
 
         minSdkVersion = 15
         targetSdkVersion = 28
