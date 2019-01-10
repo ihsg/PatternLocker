@@ -20,7 +20,7 @@ internal object Config {
     const val defaultEnableAutoClean = true
     const val defaultEnableHapticFeedback = false
     const val defaultCanSkip = false
-    const val defaultEnableLogger = true
+    const val defaultEnableLogger = false
 
     val defaultNormalColor: Int
         @ColorInt
