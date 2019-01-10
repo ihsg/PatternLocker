@@ -10,6 +10,7 @@ import android.support.annotation.ColorInt
  */
 
 class DefaultLockerLinkedLineView : ILockerLinkedLineView {
+
     @ColorInt
     private var normalColor: Int = 0
     @ColorInt
@@ -18,6 +19,8 @@ class DefaultLockerLinkedLineView : ILockerLinkedLineView {
     private val paint: Paint by lazy {
         Config.createPaint()
     }
+
+    private val TAG = "DefaultLockerLinkedLineView"
 
     init {
         this.paint.style = Paint.Style.STROKE
@@ -51,6 +54,7 @@ class DefaultLockerLinkedLineView : ILockerLinkedLineView {
     }
 
     override fun draw(canvas: Canvas, hitIndexList: List<Int>, cellBeanList: List<CellBean>, endX: Float, endY: Float, isError: Boolean) {
+        Logger.d(TAG, "hitIndexList = $hitIndexList, cellBeanList = $cellBeanList")
         if (hitIndexList.isEmpty() || cellBeanList.isEmpty()) {
             return
         }

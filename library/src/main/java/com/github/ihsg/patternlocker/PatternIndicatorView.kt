@@ -26,8 +26,8 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
         mutableListOf<Int>()
     }
     private val cellBeanList: List<CellBean> by lazy {
-        val w = width - paddingLeft - paddingRight
-        val h = height - paddingTop - paddingBottom
+        val w = this.width - this.paddingLeft - this.paddingRight
+        val h = this.height - this.paddingTop - this.paddingBottom
         CellFactory(w, h).cellBeanList
     }
 
@@ -181,7 +181,6 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
         drawLinkedLine(canvas)
         drawCells(canvas)
     }
@@ -211,6 +210,7 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
 
     private fun initData() {
         this.buildWithDefaultStyle()
+        this.hitIndexList.clear()
     }
 
     private fun drawLinkedLine(canvas: Canvas) {

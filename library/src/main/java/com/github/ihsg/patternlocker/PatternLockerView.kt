@@ -32,7 +32,10 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private var canSkip: Boolean = false
     private var enableHapticFeedback: Boolean = false
     private val cellBeanList: List<CellBean> by lazy {
-        CellFactory(width, height).cellBeanList
+        this.paddingStart
+        val w = this.width - this.paddingLeft - this.paddingRight
+        val h = this.height - this.paddingTop - this.paddingBottom
+        CellFactory(w, h).cellBeanList
     }
     private val hitIndexList: MutableList<Int> by lazy {
         mutableListOf<Int>()
@@ -49,6 +52,10 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
     init {
         this.init(context, attrs, defStyleAttr)
+    }
+
+    fun enableDebug() {
+        Logger.enable = true
     }
 
     fun setOnPatternChangedListener(listener: OnPatternChangeListener?) {
@@ -245,6 +252,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private fun initData() {
         this.buildWithDefaultStyle()
+        this.hitIndexList.clear()
+        Logger.enable = Config.defaultEnableLogger
     }
 
     private fun drawLinkedLine(canvas: Canvas) {
@@ -290,6 +299,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun handleActionMove(event: MotionEvent) {
+        printLogger()
         //1. update hit state
         updateHitState(event)
 
@@ -306,6 +316,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun handleActionUp(event: MotionEvent) {
+        printLogger()
+
         //1. update hit state
         updateHitState(event)
 
@@ -339,7 +351,6 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
             this.hitSize = 0
             this.cellBeanList.forEach { it.isHit = false }
         }
-
     }
 
     override fun onDetachedFromWindow() {
@@ -359,6 +370,13 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
                     HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
                             or HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
         }
+    }
+
+    private fun printLogger() {
+        if (Logger.enable) {
+            Logger.d(TAG, "cellBeanList = ${this.cellBeanList}, hitIndexList = ${this.hitIndexList}")
+        }
+
     }
 
     companion object {

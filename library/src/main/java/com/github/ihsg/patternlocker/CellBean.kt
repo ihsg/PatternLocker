@@ -20,4 +20,9 @@ class CellBean(val id: Int, val x: Float, val y: Float, val radius: Float) {
         val r = if (canSkip) this.radius else this.radius * 1.5f
         return Math.sqrt((dx * dx + dy * dy).toDouble()) <= r.toDouble()
     }
+
+    override fun toString(): String {
+        return "CellBean(id=$id, x=$x, y=$y, radius=$radius, isHit=$isHit)"
+    }
+
 }

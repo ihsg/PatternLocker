@@ -13,11 +13,10 @@ internal class CellFactory(private val width: Int, private val height: Int) {
 
         for (i in 0..2) {
             for (j in 0..2) {
-                result.add(CellBean(
-                        i * 3 + j,
-                        (j * 3 + 1) * pWidth,
-                        (i * 3 + 1) * pHeight,
-                        pWidth))
+                val id = (i * 3 + j) % 9
+                val x = (j * 3 + 1) * pWidth
+                val y = (i * 3 + 1) * pHeight
+                result.add(CellBean(id, x, y, pWidth))
             }
         }
         return@lazy result
