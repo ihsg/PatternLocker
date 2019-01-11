@@ -38,7 +38,7 @@ allprojects {
 ````
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.4.0'
+    implementation 'com.github.ihsg:PatternLocker:2.4.4'
 }
 ````
 
@@ -106,6 +106,44 @@ interface OnPatternChangeListener {
     fun onClear(view: PatternLockerView)
 }
 ````
+##  已知问题解决方案
+
+####  1. Java开发使用该库出现的错误: Didn't find class "kotlin.reflect.KProperty"
+
+解决方案：请配置kotlin开发环境 [参考Kotlin官网](https://kotlinlang.org/docs/tutorials/kotlin-android.html)
+
+步骤1: 在根目录下的buid.gradle
+
+```
+buildscript {
+    ext {
+        kotlinVersion = '1.3.11'
+    }
+    dependencies {
+        ......
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+```
+
+步骤2: 在module目录下的buid.gradle
+
+```
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+dependencies {
+    ......
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+}
+
+```
+
+
+
 ## 自由定制
 
 ### 1. 简单定制   
