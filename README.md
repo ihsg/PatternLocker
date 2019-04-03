@@ -38,7 +38,7 @@ allprojects {
 ````
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.4.4'
+    implementation 'com.github.ihsg:PatternLocker:2.4.5'
 }
 ````
 
@@ -164,6 +164,9 @@ dependencies {
 | plv_enableAutoClean  | 自动清除绘制图案      | true     |
 | plv_canSkip              |    是否跳过中间点    |  false  |
 | plv_enableHapticFeedback | 是否使用触碰震动反馈 |  false  |
+| plv_freezeDuration | 操作完延时清除时长（单位ms） | 1000 |
+
+
 示例如下：
 ```
 <com.github.ihsg.patternlocker.PatternLockerView
@@ -179,6 +182,7 @@ dependencies {
         app:plv_errorColor="@color/color_red"
         app:plv_fillColor="@color/colorWhite"
         app:plv_hitColor="@color/colorPrimary"
+        app:plv_freezeDuration="5000"
         app:plv_lineWidth="3dp" />
 ```
 
@@ -312,6 +316,6 @@ interface IIndicatorLinkedLineView {
 ```
 
 > 温馨提示：       
-1、更详细的定制方式可参考demo中以及Library中default开头的代码；               
-2、如果设置了以上样式，最后需要通过build()方法使设置方法生效，详见代码。
+> 1、更详细的定制方式可参考demo中以及Library中default开头的代码；               
+> 2、如果设置了以上样式，最后需要通过build()方法使设置方法生效，详见代码。
 

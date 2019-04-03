@@ -44,5 +44,6 @@
         app:plv_hitColor="@color/colorPrimaryDark"
         app:plv_fillColor="@color/color_blue"
         app:plv_errorColor="@color/color_red"
+        app:plv_freezeDuration="5000"
         app:plv_lineWidth="3dp"/>
 </LinearLayout>
