@@ -2,7 +2,7 @@ package com.github.ihsg.patternlocker
 
 import android.util.Log
 
-class Logger {
+internal class Logger {
     companion object {
         var enable = false
         fun d(tag: String, msg: String) {

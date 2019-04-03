@@ -23,10 +23,11 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private var errorColor: Int = 0
     @ColorInt
     private var fillColor: Int = 0
+    private var freezeDuration: Int = 0
+    private var hitSize: Int = 0
     private var lineWidth: Float = 0f
     private var endX: Float = 0f
     private var endY: Float = 0f
-    private var hitSize: Int = 0
     private var isError: Boolean = false
     private var enableAutoClean: Boolean = false
     private var canSkip: Boolean = false
@@ -41,8 +42,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private var hitCellView: IHitCellView? = null
 
     private val action = Runnable {
-        isEnabled = true
-        clearHitState()
+        this.isEnabled = true
+        this.clearHitState()
     }
 
     init {
@@ -149,6 +150,15 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         return this
     }
 
+    fun setFreezeDuration(freezeDuration: Int): PatternLockerView {
+        this.freezeDuration = freezeDuration
+        return this
+    }
+
+    fun getFreezeDuration(): Int {
+        return this.freezeDuration
+    }
+
     fun buildWithDefaultStyle() {
         this.setNormalCellView(DefaultLockerNormalCellView()
                 .setNormalColor(this.getNormalColor())
@@ -228,6 +238,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         this.hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, Config.defaultHitColor)
         this.errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, Config.defaultErrorColor)
         this.fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.defaultFillColor)
+        this.freezeDuration = ta.getInteger(R.styleable.PatternLockerView_plv_freezeDuration, Config.defaultFreezeDuration)
         this.lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getDefaultLineWidth(resources))
         this.enableAutoClean = ta.getBoolean(R.styleable.PatternLockerView_plv_enableAutoClean, Config.defaultEnableAutoClean)
         this.enableHapticFeedback = ta.getBoolean(R.styleable.PatternLockerView_plv_enableHapticFeedback, Config.defaultEnableHapticFeedback)
@@ -249,7 +260,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun initCellBeanList() {
-        if (!this::cellBeanList.isInitialized){
+        if (!this::cellBeanList.isInitialized) {
             val w = this.width - this.paddingLeft - this.paddingRight
             val h = this.height - this.paddingTop - this.paddingBottom
             this.cellBeanList = CellFactory(w, h).cellBeanList
@@ -360,8 +371,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun startTimer() {
-        isEnabled = false
-        this.postDelayed(this.action, Config.defaultDelayTime.toLong())
+        this.isEnabled = false
+        this.postDelayed(this.action, this.freezeDuration.toLong())
     }
 
     private fun hapticFeedback() {

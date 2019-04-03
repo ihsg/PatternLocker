@@ -16,7 +16,7 @@ internal object Config {
     private const val DEFAULT_FILL_COLOR = "#FFFFFF"
     private const val DEFAULT_LINE_WIDTH = 1
 
-    const val defaultDelayTime = 1000//ms
+    const val defaultFreezeDuration = 1000//ms
     const val defaultEnableAutoClean = true
     const val defaultEnableHapticFeedback = false
     const val defaultCanSkip = false
