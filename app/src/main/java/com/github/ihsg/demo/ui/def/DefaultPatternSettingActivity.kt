@@ -3,6 +3,7 @@ package com.github.ihsg.demo.ui.def
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.github.ihsg.demo.R
 import com.github.ihsg.demo.util.PatternHelper
@@ -46,9 +47,9 @@ class DefaultPatternSettingActivity : AppCompatActivity() {
     private fun updateMsg() {
         this.textMsg.text = this.patternHelper!!.message
         this.textMsg.setTextColor(if (this.patternHelper!!.isOk)
-            resources.getColor(R.color.colorPrimary)
+            ContextCompat.getColor(this, R.color.colorPrimary)
         else
-            resources.getColor(R.color.colorAccent))
+            ContextCompat.getColor(this, R.color.colorAccent))
     }
 
     private fun finishIfNeeded() {

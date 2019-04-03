@@ -3,6 +3,7 @@ package com.github.ihsg.demo.ui.simple
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 
@@ -20,18 +21,18 @@ class SimplePatternCheckingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_pattern_checking)
 
-        this.patternIndicatorView!!.setFillColor(resources.getColor(R.color.color_blue))
-                .setNormalColor(resources.getColor(R.color.colorWhite))
-                .setHitColor(resources.getColor(R.color.colorPrimaryDark))
-                .setErrorColor(resources.getColor(R.color.color_red))
+        this.patternIndicatorView!!.setFillColor(ContextCompat.getColor(this, R.color.color_blue))
+                .setNormalColor(ContextCompat.getColor(this, R.color.colorWhite))
+                .setHitColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                .setErrorColor(ContextCompat.getColor(this, R.color.color_red))
                 .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
                         resources.displayMetrics))
                 .buildWithDefaultStyle()
 
-        this.patternLockerView!!.setFillColor(resources.getColor(R.color.color_blue))
-                .setNormalColor(resources.getColor(R.color.colorWhite))
-                .setHitColor(resources.getColor(R.color.colorPrimaryDark))
-                .setErrorColor(resources.getColor(R.color.color_red))
+        this.patternLockerView!!.setFillColor(ContextCompat.getColor(this, R.color.color_blue))
+                .setNormalColor(ContextCompat.getColor(this, R.color.colorWhite))
+                .setHitColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                .setErrorColor(ContextCompat.getColor(this, R.color.color_red))
                 .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
                         resources.displayMetrics))
                 .buildWithDefaultStyle()
@@ -65,9 +66,9 @@ class SimplePatternCheckingActivity : AppCompatActivity() {
     private fun updateMsg() {
         this.textMsg.text = this.patternHelper!!.message
         this.textMsg!!.setTextColor(if (this.patternHelper!!.isOk)
-            resources.getColor(R.color.colorPrimaryDark)
+            ContextCompat.getColor(this, R.color.colorPrimaryDark)
         else
-            resources.getColor(R.color.color_red))
+            ContextCompat.getColor(this, R.color.color_red))
     }
 
     private fun finishIfNeeded() {

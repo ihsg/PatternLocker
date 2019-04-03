@@ -15,9 +15,6 @@ buildscript {
         supportLibraryVersion = '28.0.0'
         constraintLayoutVersion = '1.0.2'
         kotlinVersion = '1.3.21'
-
-        espressoCoreVersion = '2.2.2'
-        junitVersion = '4.12'
     }
 
     repositories {
