@@ -319,3 +319,8 @@ interface IIndicatorLinkedLineView {
 > 1、更详细的定制方式可参考demo中以及Library中default开头的代码；               
 > 2、如果设置了以上样式，最后需要通过build()方法使设置方法生效，详见代码。
 
+### 联系方式（微信）当
+
+当你遇到问题时，请先看demo了解用法，如果还是没有解决又比较着急，可以通过微信联系我哦！
+
+![微信](./captures/hsg_Wechat_QR.jpeg)
