@@ -11,7 +11,7 @@
 - 支持是否跳过中间点（默认不跳过）；
 - 支持是否触碰震动反馈（默认不震动）；
 - 支持指示器辅助控件可选择使用；
-- 业务逻辑（至少连点几个点、验证时最多可出错几次等）必须自定义。
+- 业务逻辑（至少连点几个点、验证时最多可出错几次等）须自定义。
 
 ## 预览效果图
 ![setting](./captures/captures.png)
@@ -20,12 +20,12 @@
 
 ![download](./captures/download_xcode.png)
 
-## 使用方法
+## 基本用法
 
 [![](https://jitpack.io/v/ihsg/PatternLocker.svg)](https://jitpack.io/#ihsg/PatternLocker)
 
 第一步: 首先打开项目根目录下的 build.gradle，添加jitpack仓库地址，代码如下：
-````
+````groovy
 allprojects {
     repositories {
         ...
@@ -35,16 +35,16 @@ allprojects {
 ````
 
 第二步: 打开需要依赖此 library 的module，比如此demo中是 app 这个 module，添加：
-````
+````groovy
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.4.5'
+    implementation 'com.github.ihsg:PatternLocker:2.5.1'
 }
 ````
 
 第三步: 在布局文件中添加PatternLockViewer和PatternIndicatorView（可根据设计需要选择使用）控件，示意如下：
 
-````
+````xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -72,8 +72,33 @@ dependencies {
 </LinearLayout>
 
 ````
-第四步: 在java代码中为PatternLockerView添加OnPatternChangeListener并处理相应业务逻辑，OnPatternChangeListener接口说明如下：
-````
+第四步: 在java代码中为PatternLockerView添加OnPatternChangeListener并处理相应业务逻辑，
+
+```kotlin
+patternLockerView.setOnPatternChangedListener(object : OnPatternChangeListener {
+            override fun onStart(view: PatternLockerView) {
+                //根据需要添加业务逻辑
+            }
+
+            override fun onChange(view: PatternLockerView, hitIndexList: List<Int>) {
+                //根据需要添加业务逻辑
+            }
+
+            override fun onComplete(view: PatternLockerView, hitIndexList: List<Int>) {
+                //根据需要添加业务逻辑
+            }
+
+            override fun onClear(view: PatternLockerView) {
+                //根据需要添加业务逻辑
+            }
+        })
+```
+
+
+
+OnPatternChangeListener接口说明如下：
+
+````kotlin
 interface OnPatternChangeListener {
     /**
      * 开始绘制图案时（即手指按下触碰到绘画区域时）会调用该方法
@@ -106,6 +131,28 @@ interface OnPatternChangeListener {
     fun onClear(view: PatternLockerView)
 }
 ````
+## 常用方法说明
+
+### 1. PatternLockerView
+
+```kotlin
+// 监听器
+setOnPatternChangedListener(listener: OnPatternChangeListener?)
+
+// 设置当前绘制的是否是错误图案
+updateStatus(isError: Boolean)
+
+// 清除已绘制的图案
+clearHitState()
+```
+
+### 2. PatternIndicatorView
+
+```kotlin
+// 设置已绘制图案及状态
+updateState(hitIndexList: List<Int>?, isError: Boolean)
+```
+
 ##  已知问题解决方案
 
 ####  1. Java开发使用该库出现的错误: Didn't find class "kotlin.reflect.KProperty"
@@ -114,10 +161,10 @@ interface OnPatternChangeListener {
 
 步骤1: 在根目录下的buid.gradle
 
-```
+```groovy
 buildscript {
     ext {
-        kotlinVersion = '1.3.11'
+        kotlinVersion = '1.3.21'
     }
     dependencies {
         ......
@@ -131,7 +178,7 @@ buildscript {
 
 步骤2: 在module目录下的buid.gradle
 
-```
+```groovy
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -142,12 +189,10 @@ dependencies {
 
 ```
 
-
-
 ## 自由定制
 
-### 1. 简单定制   
-可以通过xml和java代码两种方式更改默认颜色、绘制时颜色、出错时颜色、填充色以及连接线粗细
+### 1. 默认样式简单定制   
+可以通过xml和kotlin代码两种方式更改默认颜色、绘制时颜色、出错时颜色、填充色以及连接线粗细等
 
 > 推荐使用xml方式，更精简，更方便
 
@@ -162,13 +207,13 @@ dependencies {
 | plv_fillColor  | 图案填充色      | #FFFFFF |
 | plv_lineWidth  | 连接线线宽      | 1dp     |
 | plv_enableAutoClean  | 自动清除绘制图案      | true     |
-| plv_canSkip              |    是否跳过中间点    |  false  |
+| plv_enableSkip        |    是否跳过中间点    |  false  |
 | plv_enableHapticFeedback | 是否使用触碰震动反馈 |  false  |
 | plv_freezeDuration | 操作完延迟自动清除时长（单位ms） | 1000 |
 
 
 示例如下：
-```
+```xml
 <com.github.ihsg.patternlocker.PatternLockerView
         android:id="@+id/patternLockerView"
         android:layout_width="match_parent"
@@ -176,7 +221,7 @@ dependencies {
         android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
-        app:plv_canSkip="true"
+        app:plv_enableSkip="true"
         app:plv_color="@color/color_gray"
         app:plv_enableAutoClean="false"
         app:plv_errorColor="@color/color_red"
@@ -197,7 +242,7 @@ dependencies {
 | piv_lineWidth  | 指示器连接线线宽       | 1dp     |
 
 示例如下：
-```
+```xml
 <com.github.ihsg.patternlocker.PatternLockerView
         android:id="@+id/patternLockerView"
         android:layout_width="match_parent"
@@ -205,7 +250,7 @@ dependencies {
         android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
-        app:plv_canSkip="true"
+        app:plv_enableSkip="true"
         app:plv_enableHapticFeedback="true"
         app:plv_color="@color/color_gray"
         app:plv_enableAutoClean="false"
@@ -214,30 +259,32 @@ dependencies {
         app:plv_hitColor="@color/colorPrimary"
         app:plv_lineWidth="3dp" />
 ```
-#### 1.2 java代码方式
+#### 1.2 kotlin代码方式
 
-> 注意：设置完一定要调用buildWithDefaultStyle()方法使各个设置生效！！！
+> 这里styleDecorator可以通过normalCellView、hitCellView和linkedLineView三者均可获取，下面以normalCellView为例。
 
 - PatternLockerView可设置的属性
-````
-this.patternLockerView.setFillColor(getResources().getColor(R.color.color_blue))
-                .setNormalColor(getResources().getColor(R.color.colorWhite))
-                .setHitColor(getResources().getColor(R.color.colorPrimaryDark))
-                .setErrorColor(getResources().getColor(R.color.color_red))
-                .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
-                        getResources().getDisplayMetrics()))
-                .buildWithDefaultStyle();
+````kotlin
+val plvStyle = (this.patternLockerView.normalCellView as DefaultLockerNormalCellView).styleDecorator
+
+plvStyle.normalColor = ContextCompat.getColor(this, R.color.colorWhite)
+plvStyle.fillColor = ContextCompat.getColor(this, R.color.color_blue)
+plvStyle.hitColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+plvStyle.errorColor = ContextCompat.getColor(this, R.color.color_red)
+plvStyle.lineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
+                resources.displayMetrics)
 ````
 
 - PatternIndicatorView可设置的属性
-````
-this.patternIndicatorView.setFillColor(getResources().getColor(R.color.color_blue))
-                .setNormalColor(getResources().getColor(R.color.colorWhite))
-                .setHitColor(getResources().getColor(R.color.colorPrimaryDark))
-                .setErrorColor(getResources().getColor(R.color.color_red))
-                .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
-                        getResources().getDisplayMetrics()))
-                .buildWithDefaultStyle();
+````kotlin
+val pivStyle = (this.patternIndicatorView.normalCellView as DefaultLockerNormalCellView).styleDecorator
+        
+pivStyle.normalColor = ContextCompat.getColor(this, R.color.colorWhite)
+pivStyle.fillColor = ContextCompat.getColor(this, R.color.color_blue)
+pivStyle.hitColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+pivStyle.errorColor = ContextCompat.getColor(this, R.color.color_red)
+pivStyle.lineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
+                resources.displayMetrics)
 ````
 
 ### 2. 深度定制
@@ -246,7 +293,7 @@ PatternLockerView和PatternIndicatorView均提供了设置连接线、各个小�
 
 - 正常状态下各个小单元控件的样式（PatternLockerView和PatternIndicatorView通用）
 
-```
+```kotlin
 interface INormalCellView {
     /**
      * 绘制正常情况下（即未设置的）每个图案的样式
@@ -260,7 +307,7 @@ interface INormalCellView {
 
 - 设置时各个小单元控件的样式（PatternLockerView和PatternIndicatorView通用）
 
-```
+```kotlin
 interface IHitCellView {
     /**
      * 绘制已设置的每个图案的样式
@@ -275,7 +322,7 @@ interface IHitCellView {
 
 - PatternLockerView连接线的样式
 
-```
+```kotlin
 interface ILockerLinkedLineView {
     /**
      * 绘制图案密码连接线
@@ -298,7 +345,7 @@ interface ILockerLinkedLineView {
 
 - PatternIndicatorView连接线的样式
 
-```
+```kotlin
 interface IIndicatorLinkedLineView {
     /**
      * 绘制指示器连接线
@@ -315,9 +362,21 @@ interface IIndicatorLinkedLineView {
 }
 ```
 
-> 温馨提示：       
-> 1、更详细的定制方式可参考demo中以及Library中default开头的代码；               
-> 2、如果设置了以上样式，最后需要通过build()方法使设置方法生效，详见代码。
+分别设置主控件和指示器的定制实现：
+
+```kotlin
+// 主控件
+patternLockerView.normalCellView = ... //定制实现
+patternLockerView.hitCellView = ... //定制实现
+patternLockerView.linkedLineView = ... //定制实现
+
+// 指示器控件
+patternIndicatorView.normalCellView = ... //定制实现
+patternIndicatorView.hitCellView = ... //定制实现
+patternIndicatorView.linkedLineView = ... //定制实现
+```
+
+> 温馨提示：更详细的定制方式可参考Library中default开头的代码。
 
 ### 联系方式（微信）
 
