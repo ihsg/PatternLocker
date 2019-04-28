@@ -19,24 +19,20 @@ internal object Config {
     const val defaultFreezeDuration = 1000//ms
     const val defaultEnableAutoClean = true
     const val defaultEnableHapticFeedback = false
-    const val defaultCanSkip = false
+    const val defaultEnableSkip = false
     const val defaultEnableLogger = false
 
-    val defaultNormalColor: Int
-        @ColorInt
-        get() = Color.parseColor(DEFAULT_NORMAL_COLOR)
+    @ColorInt
+    val defaultNormalColor: Int = Color.parseColor(DEFAULT_NORMAL_COLOR)
 
-    val defaultHitColor: Int
-        @ColorInt
-        get() = Color.parseColor(DEFAULT_HIT_COLOR)
+    @ColorInt
+    val defaultHitColor: Int = Color.parseColor(DEFAULT_HIT_COLOR)
 
-    val defaultErrorColor: Int
-        @ColorInt
-        get() = Color.parseColor(DEFAULT_ERROR_COLOR)
+    @ColorInt
+    val defaultErrorColor: Int = Color.parseColor(DEFAULT_ERROR_COLOR)
 
-    val defaultFillColor: Int
-        @ColorInt
-        get() = Color.parseColor(DEFAULT_FILL_COLOR)
+    @ColorInt
+    val defaultFillColor: Int = Color.parseColor(DEFAULT_FILL_COLOR)
 
     fun getDefaultLineWidth(resources: Resources): Float {
         return convertDpToPx(DEFAULT_LINE_WIDTH.toFloat(), resources)

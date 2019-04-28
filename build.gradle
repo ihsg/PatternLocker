@@ -5,7 +5,7 @@ buildscript {
     // versions
     ext {
         versionCode = 14
-        versionName = '2.4.5'
+        versionName = '2.5.0'
 
         minSdkVersion = 15
         targetSdkVersion = 28
@@ -23,7 +23,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.4.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 

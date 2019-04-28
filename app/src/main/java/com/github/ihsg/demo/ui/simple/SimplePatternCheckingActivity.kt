@@ -9,6 +9,7 @@ import android.util.TypedValue
 
 import com.github.ihsg.demo.R
 import com.github.ihsg.demo.util.PatternHelper
+import com.github.ihsg.patternlocker.DefaultLockerNormalCellView
 import com.github.ihsg.patternlocker.OnPatternChangeListener
 import com.github.ihsg.patternlocker.PatternLockerView
 import kotlinx.android.synthetic.main.activity_default_pattern_checking.*
@@ -21,21 +22,21 @@ class SimplePatternCheckingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_pattern_checking)
 
-        this.patternIndicatorView!!.setFillColor(ContextCompat.getColor(this, R.color.color_blue))
-                .setNormalColor(ContextCompat.getColor(this, R.color.colorWhite))
-                .setHitColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                .setErrorColor(ContextCompat.getColor(this, R.color.color_red))
-                .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
-                        resources.displayMetrics))
-                .buildWithDefaultStyle()
+        val pivStyle = (this.patternIndicatorView.normalCellView as DefaultLockerNormalCellView).styleDecorator
+        pivStyle.normalColor = ContextCompat.getColor(this, R.color.colorWhite)
+        pivStyle.fillColor = ContextCompat.getColor(this, R.color.color_blue)
+        pivStyle.hitColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        pivStyle.errorColor = ContextCompat.getColor(this, R.color.color_red)
+        pivStyle.lineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
+                resources.displayMetrics)
 
-        this.patternLockerView!!.setFillColor(ContextCompat.getColor(this, R.color.color_blue))
-                .setNormalColor(ContextCompat.getColor(this, R.color.colorWhite))
-                .setHitColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                .setErrorColor(ContextCompat.getColor(this, R.color.color_red))
-                .setLineWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
-                        resources.displayMetrics))
-                .buildWithDefaultStyle()
+        val plvStyle = (this.patternLockerView.normalCellView as DefaultLockerNormalCellView).styleDecorator
+        plvStyle.normalColor = ContextCompat.getColor(this, R.color.colorWhite)
+        plvStyle.fillColor = ContextCompat.getColor(this, R.color.color_blue)
+        plvStyle.hitColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        plvStyle.errorColor = ContextCompat.getColor(this, R.color.color_red)
+        plvStyle.lineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
+                resources.displayMetrics)
 
         this.patternLockerView!!.setOnPatternChangedListener(object : OnPatternChangeListener {
             override fun onStart(view: PatternLockerView) {}

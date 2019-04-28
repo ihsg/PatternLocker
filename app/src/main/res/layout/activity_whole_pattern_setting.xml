@@ -40,7 +40,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
-        app:plv_canSkip="true"
+        app:plv_enableSkip="true"
         app:plv_enableHapticFeedback="true"
         app:plv_color="@color/color_gray"
         app:plv_enableAutoClean="false"

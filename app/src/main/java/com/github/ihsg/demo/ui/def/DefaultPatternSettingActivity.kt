@@ -10,6 +10,7 @@ import com.github.ihsg.demo.util.PatternHelper
 import com.github.ihsg.patternlocker.OnPatternChangeListener
 import com.github.ihsg.patternlocker.PatternLockerView
 import kotlinx.android.synthetic.main.activity_default_pattern_checking.*
+import java.util.*
 
 class DefaultPatternSettingActivity : AppCompatActivity() {
     private var patternHelper: PatternHelper? = null
@@ -17,6 +18,7 @@ class DefaultPatternSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_default_pattern_setting)
+        patternIndicatorView.updateState(Arrays.asList(1, 2), false)
 
         patternLockerView.setOnPatternChangedListener(object : OnPatternChangeListener {
             override fun onStart(view: PatternLockerView) {}

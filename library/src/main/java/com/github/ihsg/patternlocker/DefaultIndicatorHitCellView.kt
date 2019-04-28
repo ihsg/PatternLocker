@@ -8,37 +8,14 @@ import android.support.annotation.ColorInt
  * Created by hsg on 22/02/2018.
  */
 
-class DefaultIndicatorHitCellView : IHitCellView {
-    @ColorInt
-    private var normalColor: Int = 0
-    @ColorInt
-    private var errorColor: Int = 0
+class DefaultIndicatorHitCellView(val styleDecorator: DefaultStyleDecorator) : IHitCellView {
+
     private val paint: Paint by lazy {
         Config.createPaint()
     }
 
     init {
         this.paint.style = Paint.Style.FILL
-    }
-
-    @ColorInt
-    fun getNormalColor(): Int {
-        return normalColor
-    }
-
-    fun setNormalColor(@ColorInt normalColor: Int): DefaultIndicatorHitCellView {
-        this.normalColor = normalColor
-        return this
-    }
-
-    @ColorInt
-    fun getErrorColor(): Int {
-        return errorColor
-    }
-
-    fun setErrorColor(@ColorInt errorColor: Int): DefaultIndicatorHitCellView {
-        this.errorColor = errorColor
-        return this
     }
 
     override fun draw(canvas: Canvas, cellBean: CellBean, isError: Boolean) {
@@ -52,6 +29,6 @@ class DefaultIndicatorHitCellView : IHitCellView {
 
     @ColorInt
     private fun getColor(isError: Boolean): Int {
-        return if (isError) this.getErrorColor() else this.getNormalColor()
+        return if (isError) this.styleDecorator.errorColor else this.styleDecorator.hitColor
     }
 }

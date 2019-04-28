@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.github.ihsg.demo.R
 import com.github.ihsg.demo.util.PatternHelper
+import com.github.ihsg.patternlocker.DefaultLockerNormalCellView
 import com.github.ihsg.patternlocker.OnPatternChangeListener
 import com.github.ihsg.patternlocker.PatternLockerView
 import kotlinx.android.synthetic.main.activity_simple_pattern_checking.*
@@ -20,13 +21,12 @@ class WholePatternSettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_whole_pattern_setting)
 
-        val hitCellView = RippleLockerHitCellView()
-                .setHitColor(this.patternLockerView!!.getHitColor())
-                .setErrorColor(this.patternLockerView!!.getErrorColor())
+        val decorator = (this.patternLockerView.normalCellView as DefaultLockerNormalCellView).styleDecorator
 
-        this.patternLockerView!!.setHitCellView(hitCellView)
-                .build()
-
+        this.patternLockerView.hitCellView = RippleLockerHitCellView()
+                .setHitColor(decorator.hitColor)
+                .setErrorColor(decorator.errorColor)
+        
         this.patternLockerView!!.setOnPatternChangedListener(object : OnPatternChangeListener {
             override fun onStart(view: PatternLockerView) {}
 

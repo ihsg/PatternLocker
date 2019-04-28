@@ -2,7 +2,6 @@ package com.github.ihsg.patternlocker
 
 import android.content.Context
 import android.graphics.Canvas
-import android.support.annotation.ColorInt
 import android.util.AttributeSet
 import android.util.Log
 import android.view.HapticFeedbackConstants
@@ -15,41 +14,87 @@ import android.view.View
  */
 
 class PatternLockerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
-    @ColorInt
-    private var normalColor: Int = 0
-    @ColorInt
-    private var hitColor: Int = 0
-    @ColorInt
-    private var errorColor: Int = 0
-    @ColorInt
-    private var fillColor: Int = 0
-    private var freezeDuration: Int = 0
-    private var hitSize: Int = 0
-    private var lineWidth: Float = 0f
-    private var endX: Float = 0f
-    private var endY: Float = 0f
+    companion object {
+        private const val TAG = "PatternLockerView"
+    }
+
+    /**
+     * 绘制完后是否自动清除标志位，如果开启了该标志位，延时@freezeDuration毫秒后自动清除已绘制图案
+     */
+    var enableAutoClean: Boolean = false
+
+    /**
+     * 能否跳过中间点标志位，如果开启了该标志，则可以不用连续
+     */
+    var enableSkip: Boolean = false
+
+    /**
+     * 是否开启触碰反馈，如果开启了该标志，则每连接一个cell则会震动
+     */
+    var enableHapticFeedback: Boolean = false
+
+    /**
+     * 绘制完成后多久可以清除（单位ms），只有在@enableAutoClean = true 时有效
+     */
+    var freezeDuration: Int = 0
+
+    /**
+     * 绘制连接线
+     */
+    var linkedLineView: ILockerLinkedLineView? = null
+
+    /**
+     * 绘制未操作时的cell样式
+     */
+    var normalCellView: INormalCellView? = null
+
+    /**
+     * 绘制操作时的cell样式
+     */
+    var hitCellView: IHitCellView? = null
+
+    /**
+     * 是否是错误的图案
+     */
     private var isError: Boolean = false
-    private var enableAutoClean: Boolean = false
-    private var canSkip: Boolean = false
-    private var enableHapticFeedback: Boolean = false
+
+    /**
+     * 终点x坐标
+     */
+    private var endX: Float = 0f
+
+    /**
+     * 终点y坐标
+     */
+    private var endY: Float = 0f
+
+    /**
+     * 记录绘制多少个cell，用于判断是否调用OnPatternChangeListener
+     */
+    private var hitSize: Int = 0
+
+    /**
+     * 真正的cell数组
+     */
     private lateinit var cellBeanList: List<CellBean>
+
+    /**
+     * 记录已绘制的cell的id
+     */
     private val hitIndexList: MutableList<Int> by lazy {
         mutableListOf<Int>()
     }
-    private var listener: OnPatternChangeListener? = null
-    private var linkedLineView: ILockerLinkedLineView? = null
-    private var normalCellView: INormalCellView? = null
-    private var hitCellView: IHitCellView? = null
 
-    private val action = Runnable {
-        this.isEnabled = true
-        this.clearHitState()
-    }
+    /**
+     * 监听器
+     */
+    private var listener: OnPatternChangeListener? = null
 
     init {
         this.initAttrs(context, attrs, defStyleAttr)
         this.initData()
     }
+
 
     fun enableDebug() {
         Logger.enable = true
@@ -59,140 +104,26 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         this.listener = listener
     }
 
+    /**
+     * 更改状态
+     */
     fun updateStatus(isError: Boolean) {
         this.isError = isError
-        postInvalidate()
+        invalidate()
     }
 
+    /**
+     * 清除已绘制图案
+     */
     fun clearHitState() {
-        clearHitData()
+        this.clearHitData()
         this.isError = false
         if (this.listener != null) {
             this.listener!!.onClear(this)
         }
-
-        postInvalidate()
+        invalidate()
     }
 
-    @ColorInt
-    fun getNormalColor(): Int {
-        return normalColor
-    }
-
-    fun setNormalColor(@ColorInt normalColor: Int): PatternLockerView {
-        this.normalColor = normalColor
-        return this
-    }
-
-    @ColorInt
-    fun getHitColor(): Int {
-        return hitColor
-    }
-
-    fun setHitColor(@ColorInt hitColor: Int): PatternLockerView {
-        this.hitColor = hitColor
-        return this
-    }
-
-    @ColorInt
-    fun getErrorColor(): Int {
-        return errorColor
-    }
-
-    fun setErrorColor(@ColorInt errorColor: Int): PatternLockerView {
-        this.errorColor = errorColor
-        return this
-    }
-
-    @ColorInt
-    fun getFillColor(): Int {
-        return fillColor
-    }
-
-    fun setFillColor(@ColorInt fillColor: Int): PatternLockerView {
-        this.fillColor = fillColor
-        return this
-    }
-
-    fun getLineWidth(): Float {
-        return lineWidth
-    }
-
-    fun setLineWidth(lineWidth: Float): PatternLockerView {
-        this.lineWidth = lineWidth
-        return this
-    }
-
-    fun getLinkedLineView(): ILockerLinkedLineView? {
-        return linkedLineView
-    }
-
-    fun setLinkedLineView(linkedLineView: ILockerLinkedLineView): PatternLockerView {
-        this.linkedLineView = linkedLineView
-        return this
-    }
-
-    fun getNormalCellView(): INormalCellView? {
-        return normalCellView
-    }
-
-    fun setNormalCellView(normalCellView: INormalCellView): PatternLockerView {
-        this.normalCellView = normalCellView
-        return this
-    }
-
-    fun getHitCellView(): IHitCellView? {
-        return hitCellView
-    }
-
-    fun setHitCellView(hitCellView: IHitCellView): PatternLockerView {
-        this.hitCellView = hitCellView
-        return this
-    }
-
-    fun setFreezeDuration(freezeDuration: Int): PatternLockerView {
-        this.freezeDuration = freezeDuration
-        return this
-    }
-
-    fun getFreezeDuration(): Int {
-        return this.freezeDuration
-    }
-
-    fun buildWithDefaultStyle() {
-        this.setNormalCellView(DefaultLockerNormalCellView()
-                .setNormalColor(this.getNormalColor())
-                .setFillColor(this.getFillColor())
-                .setLineWidth(this.getLineWidth())
-        ).setHitCellView(DefaultLockerHitCellView()
-                .setHitColor(this.getHitColor())
-                .setErrorColor(this.getErrorColor())
-                .setFillColor(this.getFillColor())
-                .setLineWidth(this.getLineWidth())
-        ).setLinkedLineView(DefaultLockerLinkedLineView()
-                .setNormalColor(this.getHitColor())
-                .setErrorColor(this.getErrorColor())
-                .setLineWidth(this.getLineWidth())
-        ).build()
-    }
-
-    fun build() {
-        if (getNormalCellView() == null) {
-            Log.e(TAG, "in build() function, normalCellView is null")
-            return
-        }
-
-        if (getHitCellView() == null) {
-            Log.e(TAG, "in build() function, hitCellView is null")
-            return
-        }
-
-        if (getLinkedLineView() == null) {
-            Log.w(TAG, "in build() function, linkedLineView is null")
-        }
-
-        postInvalidate()
-    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val a = Math.min(widthMeasureSpec, heightMeasureSpec)
@@ -201,8 +132,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
     override fun onDraw(canvas: Canvas) {
         this.initCellBeanList()
-        drawLinkedLine(canvas)
-        drawCells(canvas)
+        this.drawLinkedLine(canvas)
+        this.drawCells(canvas)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -213,49 +144,49 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         var isHandle = false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                handleActionDown(event)
+                this.handleActionDown(event)
                 isHandle = true
             }
             MotionEvent.ACTION_MOVE -> {
-                handleActionMove(event)
+                this.handleActionMove(event)
                 isHandle = true
             }
             MotionEvent.ACTION_UP -> {
-                handleActionUp(event)
+                this.handleActionUp(event)
                 isHandle = true
             }
             else -> {
             }
         }
-        postInvalidate()
+        invalidate()
         return if (isHandle) true else super.onTouchEvent(event)
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.PatternLockerView, defStyleAttr, 0)
 
-        this.normalColor = ta.getColor(R.styleable.PatternLockerView_plv_color, Config.defaultNormalColor)
-        this.hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, Config.defaultHitColor)
-        this.errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, Config.defaultErrorColor)
-        this.fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.defaultFillColor)
+        val normalColor = ta.getColor(R.styleable.PatternLockerView_plv_color, Config.defaultNormalColor)
+        val hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, Config.defaultHitColor)
+        val errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, Config.defaultErrorColor)
+        val fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.defaultFillColor)
+        val lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getDefaultLineWidth(resources))
+
         this.freezeDuration = ta.getInteger(R.styleable.PatternLockerView_plv_freezeDuration, Config.defaultFreezeDuration)
-        this.lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getDefaultLineWidth(resources))
         this.enableAutoClean = ta.getBoolean(R.styleable.PatternLockerView_plv_enableAutoClean, Config.defaultEnableAutoClean)
         this.enableHapticFeedback = ta.getBoolean(R.styleable.PatternLockerView_plv_enableHapticFeedback, Config.defaultEnableHapticFeedback)
-        this.canSkip = ta.getBoolean(R.styleable.PatternLockerView_plv_canSkip, Config.defaultCanSkip)
+        this.enableSkip = ta.getBoolean(R.styleable.PatternLockerView_plv_enableSkip, Config.defaultEnableSkip)
 
         ta.recycle()
 
-        this.setNormalColor(this.normalColor)
-        this.setHitColor(this.hitColor)
-        this.setErrorColor(this.errorColor)
-        this.setFillColor(this.fillColor)
-        this.setLineWidth(this.lineWidth)
+        // style
+        val styleDecorator = DefaultStyleDecorator(normalColor, fillColor, hitColor, errorColor, lineWidth)
+        this.normalCellView = DefaultLockerNormalCellView(styleDecorator)
+        this.hitCellView = DefaultLockerHitCellView(styleDecorator)
+        this.linkedLineView = DefaultLockerLinkedLineView(styleDecorator)
     }
 
     private fun initData() {
         Logger.enable = Config.defaultEnableLogger
-        this.buildWithDefaultStyle()
         this.hitIndexList.clear()
     }
 
@@ -268,8 +199,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun drawLinkedLine(canvas: Canvas) {
-        if (!this.hitIndexList.isEmpty() && getLinkedLineView() != null) {
-            getLinkedLineView()!!.draw(canvas,
+        if (this.hitIndexList.isNotEmpty()) {
+            this.linkedLineView?.draw(canvas,
                     this.hitIndexList,
                     this.cellBeanList,
                     this.endX,
@@ -279,31 +210,31 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun drawCells(canvas: Canvas) {
-        if (getHitCellView() == null) {
+        if (this.hitCellView == null) {
             Log.e(TAG, "drawCells(), hitCellView is null")
             return
         }
 
-        if (getNormalCellView() == null) {
+        if (this.normalCellView == null) {
             Log.e(TAG, "drawCells(), normalCellView is null")
             return
         }
 
         this.cellBeanList.forEach {
             if (it.isHit) {
-                getHitCellView()!!.draw(canvas, it, this.isError)
+                this.hitCellView?.draw(canvas, it, this.isError)
             } else {
-                getNormalCellView()!!.draw(canvas, it)
+                this.normalCellView?.draw(canvas, it)
             }
         }
     }
 
     private fun handleActionDown(event: MotionEvent) {
         //1. reset to default state
-        clearHitData()
+        this.clearHitData()
 
         //2. update hit state
-        updateHitState(event)
+        this.updateHitState(event)
 
         //3. notify listener
         this.listener?.onStart(this)
@@ -311,8 +242,9 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private fun handleActionMove(event: MotionEvent) {
         printLogger()
+
         //1. update hit state
-        updateHitState(event)
+        this.updateHitState(event)
 
         //2. update end point
         this.endX = event.x
@@ -327,10 +259,10 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun handleActionUp(event: MotionEvent) {
-        printLogger()
+        this.printLogger()
 
         //1. update hit state
-        updateHitState(event)
+        this.updateHitState(event)
 
         //2. update end point
         this.endX = 0f
@@ -342,13 +274,13 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
         //4. startTimer if needed
         if (this.enableAutoClean && this.hitIndexList.size > 0) {
-            startTimer()
+            this.startTimer()
         }
     }
 
     private fun updateHitState(event: MotionEvent) {
         this.cellBeanList.forEach {
-            if (!it.isHit && it.of(event.x, event.y, this.canSkip)) {
+            if (!it.isHit && it.of(event.x, event.y, this.enableSkip)) {
                 it.isHit = true
                 this.hitIndexList.add(it.id)
                 this.hapticFeedback()
@@ -357,7 +289,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun clearHitData() {
-        if (!this.hitIndexList.isEmpty()) {
+        if (this.hitIndexList.isNotEmpty()) {
             this.hitIndexList.clear()
             this.hitSize = 0
             this.cellBeanList.forEach { it.isHit = false }
@@ -368,6 +300,11 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         this.setOnPatternChangedListener(null)
         this.removeCallbacks(this.action)
         super.onDetachedFromWindow()
+    }
+
+    private val action = Runnable {
+        this.isEnabled = true
+        this.clearHitState()
     }
 
     private fun startTimer() {
@@ -387,9 +324,5 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
         if (Logger.enable) {
             Logger.d(TAG, "cellBeanList = ${this.cellBeanList}, hitIndexList = ${this.hitIndexList}")
         }
-    }
-
-    companion object {
-        private const val TAG = "PatternLockerView"
     }
 }
