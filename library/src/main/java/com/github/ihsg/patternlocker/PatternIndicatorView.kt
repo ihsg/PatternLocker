@@ -34,21 +34,21 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     }
 
     fun updateState(hitIndexList: List<Int>?, isError: Boolean) {
-        hitIndexList?.let {
-            //1. clear pre state
-            if (this.hitIndexList.isNotEmpty()) {
-                this.hitIndexList.clear()
-            }
-
-            //2. record new state
-            this.hitIndexList.addAll(it)
-
-            //3. update result
-            this.isError = isError
-
-            //4. update view
-            invalidate()
+        //1. clear pre state
+        if (this.hitIndexList.isNotEmpty()) {
+            this.hitIndexList.clear()
         }
+
+        //2. record new state
+        hitIndexList?.let {
+            this.hitIndexList.addAll(it)
+        }
+
+        //3. update result
+        this.isError = isError
+
+        //4. update view
+        invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

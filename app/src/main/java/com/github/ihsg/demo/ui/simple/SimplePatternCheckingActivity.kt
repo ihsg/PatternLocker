@@ -9,6 +9,7 @@ import android.util.TypedValue
 
 import com.github.ihsg.demo.R
 import com.github.ihsg.demo.util.PatternHelper
+import com.github.ihsg.patternlocker.DefaultIndicatorNormalCellView
 import com.github.ihsg.patternlocker.DefaultLockerNormalCellView
 import com.github.ihsg.patternlocker.OnPatternChangeListener
 import com.github.ihsg.patternlocker.PatternLockerView
@@ -22,7 +23,7 @@ class SimplePatternCheckingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_pattern_checking)
 
-        val pivStyle = (this.patternIndicatorView.normalCellView as DefaultLockerNormalCellView).styleDecorator
+        val pivStyle = (this.patternIndicatorView.normalCellView as DefaultIndicatorNormalCellView).styleDecorator
         pivStyle.normalColor = ContextCompat.getColor(this, R.color.colorWhite)
         pivStyle.fillColor = ContextCompat.getColor(this, R.color.color_blue)
         pivStyle.hitColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
