@@ -38,7 +38,7 @@ allprojects {
 ````groovy
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.5.3'
+    implementation 'com.github.ihsg:PatternLocker:2.5.4'
 }
 ````
 
@@ -164,7 +164,7 @@ updateState(hitIndexList: List<Int>?, isError: Boolean)
 ```groovy
 buildscript {
     ext {
-        kotlinVersion = '1.3.21'
+        kotlinVersion = '1.3.40'
     }
     dependencies {
         ......
@@ -205,7 +205,7 @@ dependencies {
 | plv_hitColor   | 绘制图案的颜色    | #3F51B5 |
 | plv_errorColor | 绘制图案出错时的颜色 | #F44336 |
 | plv_fillColor  | 图案填充色      | #FFFFFF |
-| plv_lineWidth  | 连接线线宽      | 1dp     |
+| plv_lineWidth  | 图案的线宽      | 1dp     |
 | plv_enableAutoClean  | 自动清除绘制图案      | true     |
 | plv_enableSkip        |    是否跳过中间点    |  false  |
 | plv_enableHapticFeedback | 是否使用触碰震动反馈 |  false  |
@@ -239,7 +239,7 @@ dependencies {
 | piv_hitColor   | 指示器中选中图案的颜色    | #3F51B5 |
 | piv_errorColor | 指示器中选中图案出错时的颜色 | #F44336 |
 | piv_fillColor  | 图案填充色          | #FFFFFF |
-| piv_lineWidth  | 指示器连接线线宽       | 1dp     |
+| piv_lineWidth  | 图案的线宽       | 1dp     |
 
 示例如下：
 ```xml
