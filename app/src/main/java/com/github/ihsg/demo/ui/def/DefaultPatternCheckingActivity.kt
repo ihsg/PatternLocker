@@ -20,7 +20,8 @@ class DefaultPatternCheckingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_default_pattern_checking)
 
-
+        patternLockerView.linkedLineView = null
+        patternLockerView.hitCellView = null
         patternLockerView.setOnPatternChangedListener(object : OnPatternChangeListener {
             override fun onStart(view: PatternLockerView) {}
 

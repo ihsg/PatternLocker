@@ -9,7 +9,7 @@ import android.util.TypedValue
 /**
  * Created by hsg on 23/09/2017.
  */
-internal object Config {
+internal object DefaultConfig {
     private const val DEFAULT_NORMAL_COLOR = "#2196F3"
     private const val DEFAULT_HIT_COLOR = "#3F51B5"
     private const val DEFAULT_ERROR_COLOR = "#F44336"

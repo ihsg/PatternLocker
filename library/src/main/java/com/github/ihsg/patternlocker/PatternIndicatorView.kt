@@ -3,8 +3,8 @@ package com.github.ihsg.patternlocker
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
+import kotlin.math.min
 
 /**
  * Created by hsg on 20/09/2017.
@@ -52,7 +52,7 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val a = Math.min(widthMeasureSpec, heightMeasureSpec)
+        val a = min(widthMeasureSpec, heightMeasureSpec)
         super.onMeasure(a, a)
     }
 
@@ -70,11 +70,11 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     private fun initAttrs(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.PatternIndicatorView, defStyleAttr, 0)
 
-        val normalColor = ta.getColor(R.styleable.PatternIndicatorView_piv_color, Config.defaultNormalColor)
-        val fillColor = ta.getColor(R.styleable.PatternIndicatorView_piv_fillColor, Config.defaultFillColor)
-        val hitColor = ta.getColor(R.styleable.PatternIndicatorView_piv_hitColor, Config.defaultHitColor)
-        val errorColor = ta.getColor(R.styleable.PatternIndicatorView_piv_errorColor, Config.defaultErrorColor)
-        val lineWidth = ta.getDimension(R.styleable.PatternIndicatorView_piv_lineWidth, Config.getDefaultLineWidth(resources))
+        val normalColor = ta.getColor(R.styleable.PatternIndicatorView_piv_color, DefaultConfig.defaultNormalColor)
+        val fillColor = ta.getColor(R.styleable.PatternIndicatorView_piv_fillColor, DefaultConfig.defaultFillColor)
+        val hitColor = ta.getColor(R.styleable.PatternIndicatorView_piv_hitColor, DefaultConfig.defaultHitColor)
+        val errorColor = ta.getColor(R.styleable.PatternIndicatorView_piv_errorColor, DefaultConfig.defaultErrorColor)
+        val lineWidth = ta.getDimension(R.styleable.PatternIndicatorView_piv_lineWidth, DefaultConfig.getDefaultLineWidth(resources))
 
         ta.recycle()
 
@@ -116,18 +116,8 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     }
 
     private fun drawCells(canvas: Canvas) {
-        if (this.hitCellView == null) {
-            Log.e(TAG, "drawCells(), hitCellView is null")
-            return
-        }
-
-        if (this.normalCellView == null) {
-            Log.e(TAG, "drawCells(), normalCellView is null")
-            return
-        }
-
         this.cellBeanList.forEach {
-            if (it.isHit) {
+            if (it.isHit && this.hitCellView != null) {
                 this.hitCellView?.draw(canvas, it, this.isError)
             } else {
                 this.normalCellView?.draw(canvas, it)

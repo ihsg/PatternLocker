@@ -12,7 +12,7 @@ import android.support.annotation.ColorInt
 class DefaultIndicatorLinkedLineView(val styleDecorator: DefaultStyleDecorator) : IIndicatorLinkedLineView {
 
     private val paint: Paint by lazy {
-        Config.createPaint()
+        DefaultConfig.createPaint()
     }
 
     init {

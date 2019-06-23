@@ -10,7 +10,7 @@ import android.graphics.Paint
 class DefaultIndicatorNormalCellView(val styleDecorator: DefaultStyleDecorator) : INormalCellView {
 
     private val paint: Paint by lazy {
-        Config.createPaint()
+        DefaultConfig.createPaint()
     }
 
     init {

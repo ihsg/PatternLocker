@@ -11,7 +11,7 @@ import android.support.annotation.ColorInt
 class DefaultIndicatorHitCellView(val styleDecorator: DefaultStyleDecorator) : IHitCellView {
 
     private val paint: Paint by lazy {
-        Config.createPaint()
+        DefaultConfig.createPaint()
     }
 
     init {

@@ -3,10 +3,10 @@ package com.github.ihsg.patternlocker
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
+import kotlin.math.min
 
 
 /**
@@ -126,7 +126,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val a = Math.min(widthMeasureSpec, heightMeasureSpec)
+        val a = min(widthMeasureSpec, heightMeasureSpec)
         super.onMeasure(a, a)
     }
 
@@ -165,16 +165,16 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private fun initAttrs(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.PatternLockerView, defStyleAttr, 0)
 
-        val normalColor = ta.getColor(R.styleable.PatternLockerView_plv_color, Config.defaultNormalColor)
-        val hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, Config.defaultHitColor)
-        val errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, Config.defaultErrorColor)
-        val fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, Config.defaultFillColor)
-        val lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, Config.getDefaultLineWidth(resources))
+        val normalColor = ta.getColor(R.styleable.PatternLockerView_plv_color, DefaultConfig.defaultNormalColor)
+        val hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, DefaultConfig.defaultHitColor)
+        val errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, DefaultConfig.defaultErrorColor)
+        val fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, DefaultConfig.defaultFillColor)
+        val lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, DefaultConfig.getDefaultLineWidth(resources))
 
-        this.freezeDuration = ta.getInteger(R.styleable.PatternLockerView_plv_freezeDuration, Config.defaultFreezeDuration)
-        this.enableAutoClean = ta.getBoolean(R.styleable.PatternLockerView_plv_enableAutoClean, Config.defaultEnableAutoClean)
-        this.enableHapticFeedback = ta.getBoolean(R.styleable.PatternLockerView_plv_enableHapticFeedback, Config.defaultEnableHapticFeedback)
-        this.enableSkip = ta.getBoolean(R.styleable.PatternLockerView_plv_enableSkip, Config.defaultEnableSkip)
+        this.freezeDuration = ta.getInteger(R.styleable.PatternLockerView_plv_freezeDuration, DefaultConfig.defaultFreezeDuration)
+        this.enableAutoClean = ta.getBoolean(R.styleable.PatternLockerView_plv_enableAutoClean, DefaultConfig.defaultEnableAutoClean)
+        this.enableHapticFeedback = ta.getBoolean(R.styleable.PatternLockerView_plv_enableHapticFeedback, DefaultConfig.defaultEnableHapticFeedback)
+        this.enableSkip = ta.getBoolean(R.styleable.PatternLockerView_plv_enableSkip, DefaultConfig.defaultEnableSkip)
 
         ta.recycle()
 
@@ -186,7 +186,7 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun initData() {
-        Logger.enable = Config.defaultEnableLogger
+        Logger.enable = DefaultConfig.defaultEnableLogger
         this.hitIndexList.clear()
     }
 
@@ -210,18 +210,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     private fun drawCells(canvas: Canvas) {
-        if (this.hitCellView == null) {
-            Log.e(TAG, "drawCells(), hitCellView is null")
-            return
-        }
-
-        if (this.normalCellView == null) {
-            Log.e(TAG, "drawCells(), normalCellView is null")
-            return
-        }
-
         this.cellBeanList.forEach {
-            if (it.isHit) {
+            if (it.isHit && this.hitCellView != null) {
                 this.hitCellView?.draw(canvas, it, this.isError)
             } else {
                 this.normalCellView?.draw(canvas, it)

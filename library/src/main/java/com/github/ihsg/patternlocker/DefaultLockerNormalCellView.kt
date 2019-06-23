@@ -9,7 +9,7 @@ import android.graphics.Paint
 
 class DefaultLockerNormalCellView(val styleDecorator: DefaultStyleDecorator) : INormalCellView {
     private val paint: Paint by lazy {
-        Config.createPaint()
+        DefaultConfig.createPaint()
     }
 
     init {

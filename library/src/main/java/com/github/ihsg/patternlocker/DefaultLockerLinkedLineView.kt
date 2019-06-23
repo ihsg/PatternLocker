@@ -15,7 +15,7 @@ class DefaultLockerLinkedLineView(val styleDecorator: DefaultStyleDecorator) : I
     }
 
     private val paint: Paint by lazy {
-        Config.createPaint()
+        DefaultConfig.createPaint()
     }
 
     init {
