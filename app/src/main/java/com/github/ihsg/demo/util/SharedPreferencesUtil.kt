@@ -7,7 +7,8 @@ import com.github.ihsg.demo.TestApplication
  * Created by hsg on 14/10/2017.
  */
 internal class SharedPreferencesUtil private constructor() {
-    private val prefer: SharedPreferences = TestApplication.getContext().getSharedPreferences("test", android.content.Context.MODE_PRIVATE)
+    private val prefer: SharedPreferences = TestApplication.getContext()
+        .getSharedPreferences("test", android.content.Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor = prefer.edit()
 
     fun saveString(name: String?, data: String?) {
