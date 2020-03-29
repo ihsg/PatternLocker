@@ -3,8 +3,8 @@ package com.github.ihsg.patternlocker
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Paint
-import android.support.annotation.ColorInt
 import android.util.TypedValue
+import androidx.annotation.ColorInt
 
 /**
  * Created by hsg on 23/09/2017.

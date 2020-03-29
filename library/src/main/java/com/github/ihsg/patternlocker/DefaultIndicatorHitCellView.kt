@@ -2,13 +2,13 @@ package com.github.ihsg.patternlocker
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 /**
  * Created by hsg on 22/02/2018.
  */
 
-class DefaultIndicatorHitCellView(val styleDecorator: DefaultStyleDecorator) : IHitCellView {
+open class DefaultIndicatorHitCellView(val styleDecorator: DefaultStyleDecorator) : IHitCellView {
 
     private val paint: Paint by lazy {
         DefaultConfig.createPaint()

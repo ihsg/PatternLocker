@@ -3,7 +3,7 @@ package com.github.ihsg.demo.ui.simple
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.github.ihsg.demo.R
 import kotlinx.android.synthetic.main.activity_simple_style.*
 

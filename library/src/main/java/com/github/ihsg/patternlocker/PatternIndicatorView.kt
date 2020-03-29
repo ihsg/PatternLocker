@@ -10,7 +10,7 @@ import kotlin.math.min
  * Created by hsg on 20/09/2017.
  */
 
-class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+open class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
     companion object {
         private const val TAG = "PatternIndicatorView"
     }
@@ -109,9 +109,9 @@ class PatternIndicatorView @JvmOverloads constructor(context: Context, attrs: At
     private fun drawLinkedLine(canvas: Canvas) {
         if (this.hitIndexList.isNotEmpty()) {
             this.linkedLineView?.draw(canvas,
-                    this.hitIndexList,
-                    this.cellBeanList,
-                    this.isError)
+                this.hitIndexList,
+                this.cellBeanList,
+                this.isError)
         }
     }
 

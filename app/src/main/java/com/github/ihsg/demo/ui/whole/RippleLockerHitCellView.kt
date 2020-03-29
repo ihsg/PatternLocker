@@ -2,7 +2,7 @@ package com.github.ihsg.demo.ui.whole
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 import com.github.ihsg.patternlocker.CellBean
 import com.github.ihsg.patternlocker.IHitCellView

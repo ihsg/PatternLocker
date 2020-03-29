@@ -3,10 +3,9 @@ package com.github.ihsg.demo.ui.simple
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.github.ihsg.demo.R
 import com.github.ihsg.demo.util.PatternHelper
 import com.github.ihsg.patternlocker.DefaultIndicatorNormalCellView
@@ -29,7 +28,7 @@ class SimplePatternCheckingActivity : AppCompatActivity() {
         pivStyle.hitColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
         pivStyle.errorColor = ContextCompat.getColor(this, R.color.color_red)
         pivStyle.lineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f,
-                resources.displayMetrics)
+            resources.displayMetrics)
 
         val plvStyle = (this.patternLockerView.normalCellView as DefaultLockerNormalCellView).styleDecorator
         plvStyle.normalColor = ContextCompat.getColor(this, R.color.colorWhite)
@@ -37,7 +36,7 @@ class SimplePatternCheckingActivity : AppCompatActivity() {
         plvStyle.hitColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
         plvStyle.errorColor = ContextCompat.getColor(this, R.color.color_red)
         plvStyle.lineWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f,
-                resources.displayMetrics)
+            resources.displayMetrics)
 
         this.patternLockerView!!.setOnPatternChangedListener(object : OnPatternChangeListener {
             override fun onStart(view: PatternLockerView) {}

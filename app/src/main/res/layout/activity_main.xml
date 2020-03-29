@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.github.ihsg.demo.ui.MainActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         style="@style/AppTheme.Toolbar"
         app:title="@string/app_name" />
 

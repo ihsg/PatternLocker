@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.ihsg'
@@ -22,6 +23,10 @@ android {
 }
 
 dependencies {
-    compileOnly "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    compileOnly "androidx.appcompat:appcompat:$rootProject.ext.appcompatVersion"
+    compileOnly "androidx.core:core-ktx:$rootProject.ext.coreKtxVersion"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+}
+repositories {
+    mavenCentral()
 }

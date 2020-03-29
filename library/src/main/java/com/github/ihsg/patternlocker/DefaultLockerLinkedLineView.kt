@@ -3,13 +3,13 @@ package com.github.ihsg.patternlocker
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 /**
  * Created by hsg on 22/02/2018.
  */
 
-class DefaultLockerLinkedLineView(val styleDecorator: DefaultStyleDecorator) : ILockerLinkedLineView {
+open class DefaultLockerLinkedLineView(val styleDecorator: DefaultStyleDecorator) : ILockerLinkedLineView {
     companion object {
         private const val TAG = "DefaultLockerLinkedLineView"
     }

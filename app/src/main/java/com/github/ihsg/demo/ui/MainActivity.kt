@@ -1,7 +1,7 @@
 package com.github.ihsg.demo.ui
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.github.ihsg.demo.R
 import com.github.ihsg.demo.ui.def.DefaultStyleActivity
 import com.github.ihsg.demo.ui.simple.SimpleStyleActivity

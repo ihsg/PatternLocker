@@ -13,7 +13,7 @@ import kotlin.math.min
  * Created by hsg on 20/09/2017.
  */
 
-class PatternLockerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
     companion object {
         private const val TAG = "PatternLockerView"
     }
@@ -201,11 +201,11 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private fun drawLinkedLine(canvas: Canvas) {
         if (this.hitIndexList.isNotEmpty()) {
             this.linkedLineView?.draw(canvas,
-                    this.hitIndexList,
-                    this.cellBeanList,
-                    this.endX,
-                    this.endY,
-                    this.isError)
+                this.hitIndexList,
+                this.cellBeanList,
+                this.endX,
+                this.endY,
+                this.isError)
         }
     }
 
@@ -305,8 +305,8 @@ class PatternLockerView @JvmOverloads constructor(context: Context, attrs: Attri
     private fun hapticFeedback() {
         if (this.enableHapticFeedback) {
             this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,
-                    HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
-                            or HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
+                    or HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
         }
     }
 
