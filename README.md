@@ -38,7 +38,7 @@ allprojects {
 ````groovy
 dependencies {
     ....
-    implementation 'com.github.ihsg:PatternLocker:2.5.4'
+    implementation 'com.github.ihsg:PatternLocker:2.5.6'
 }
 ````
 
