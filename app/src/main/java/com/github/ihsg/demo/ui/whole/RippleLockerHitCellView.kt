@@ -52,13 +52,13 @@ class RippleLockerHitCellView : IHitCellView {
         val saveCount = canvas.save()
 
         this.paint.color = getColor(isError) and 0x14FFFFFF
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius, this.paint)
 
         this.paint.color = getColor(isError) and 0x43FFFFFF
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius * 2f / 3f, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius * 2f / 3f, this.paint)
 
         this.paint.color = getColor(isError)
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius / 3f, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius / 3f, this.paint)
 
         canvas.restoreToCount(saveCount)
     }

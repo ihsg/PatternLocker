@@ -22,11 +22,11 @@ open class DefaultIndicatorNormalCellView(val styleDecorator: DefaultStyleDecora
 
         //outer circle
         this.paint.color = this.styleDecorator.normalColor
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius, this.paint)
 
         //inner circle
         this.paint.color = this.styleDecorator.fillColor
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius - this.styleDecorator.lineWidth, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius - this.styleDecorator.lineWidth, this.paint)
 
         canvas.restoreToCount(saveCount)
     }

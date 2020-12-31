@@ -23,15 +23,15 @@ open class DefaultLockerHitCellView(val styleDecorator: DefaultStyleDecorator) :
 
         // draw outer circle
         this.paint.color = this.getColor(isError)
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius, this.paint)
 
         // draw fill circle
         this.paint.color = this.styleDecorator.fillColor
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius - this.styleDecorator.lineWidth, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius - this.styleDecorator.lineWidth, this.paint)
 
         // draw inner circle
         this.paint.color = this.getColor(isError)
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius / 5f, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius / 5f, this.paint)
 
         canvas.restoreToCount(saveCount)
     }

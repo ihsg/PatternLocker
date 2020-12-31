@@ -32,10 +32,10 @@ open class DefaultIndicatorLinkedLineView(val styleDecorator: DefaultStyleDecora
             if (0 <= it && it < cellBeanList.size) {
                 val c = cellBeanList[it]
                 if (first) {
-                    path.moveTo(c.x, c.y)
+                    path.moveTo(c.centerX, c.centerY)
                     first = false
                 } else {
-                    path.lineTo(c.x, c.y)
+                    path.lineTo(c.centerX, c.centerY)
                 }
             }
         }

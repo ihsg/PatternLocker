@@ -21,11 +21,11 @@ open class DefaultLockerNormalCellView(val styleDecorator: DefaultStyleDecorator
 
         // draw outer circle
         this.paint.color = this.styleDecorator.normalColor
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius, this.paint)
 
         // draw fill circle
         this.paint.color = this.styleDecorator.fillColor
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius - this.styleDecorator.lineWidth, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius - this.styleDecorator.lineWidth, this.paint)
 
         canvas.restoreToCount(saveCount)
     }

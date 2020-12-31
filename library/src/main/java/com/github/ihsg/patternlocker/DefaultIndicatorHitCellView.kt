@@ -22,7 +22,7 @@ open class DefaultIndicatorHitCellView(val styleDecorator: DefaultStyleDecorator
         val saveCount = canvas.save()
 
         this.paint.color = this.getColor(isError)
-        canvas.drawCircle(cellBean.x, cellBean.y, cellBean.radius, this.paint)
+        canvas.drawCircle(cellBean.centerX, cellBean.centerY, cellBean.radius, this.paint)
 
         canvas.restoreToCount(saveCount)
     }

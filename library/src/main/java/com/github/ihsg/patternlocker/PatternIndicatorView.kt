@@ -20,13 +20,11 @@ open class PatternIndicatorView @JvmOverloads constructor(context: Context, attr
     var hitCellView: IHitCellView? = null
 
     private var isError: Boolean = false
-    private val hitIndexList: MutableList<Int> by lazy {
-        mutableListOf<Int>()
-    }
+    private var hitIndexList = emptyList<Int>()
     private val cellBeanList: List<CellBean> by lazy {
         val w = this.width - this.paddingLeft - this.paddingRight
         val h = this.height - this.paddingTop - this.paddingBottom
-        CellFactory(w, h).cellBeanList
+        CellFactory.buildCells(w, h)
     }
 
     init {
@@ -34,20 +32,8 @@ open class PatternIndicatorView @JvmOverloads constructor(context: Context, attr
     }
 
     fun updateState(hitIndexList: List<Int>?, isError: Boolean) {
-        //1. clear pre state
-        if (this.hitIndexList.isNotEmpty()) {
-            this.hitIndexList.clear()
-        }
-
-        //2. record new state
-        hitIndexList?.let {
-            this.hitIndexList.addAll(it)
-        }
-
-        //3. update result
+        this.hitIndexList = hitIndexList ?: emptyList()
         this.isError = isError
-
-        //4. update view
         invalidate()
     }
 
@@ -64,7 +50,6 @@ open class PatternIndicatorView @JvmOverloads constructor(context: Context, attr
 
     private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
         this.initAttrs(context, attrs, defStyleAttr)
-        this.initData()
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
@@ -84,10 +69,6 @@ open class PatternIndicatorView @JvmOverloads constructor(context: Context, attr
         this.linkedLineView = DefaultIndicatorLinkedLineView(decorator)
     }
 
-    private fun initData() {
-        this.hitIndexList.clear()
-    }
-
     private fun updateHitState() {
         //1. clear pre state
         this.cellBeanList.forEach {
@@ -95,13 +76,9 @@ open class PatternIndicatorView @JvmOverloads constructor(context: Context, attr
         }
 
         //2. update hit state
-        this.hitIndexList.let { it ->
-            if (it.isNotEmpty()) {
-                it.forEach {
-                    if (0 <= it && it < this.cellBeanList.size) {
-                        this.cellBeanList[it].isHit = true
-                    }
-                }
+        this.hitIndexList.forEach {
+            if (0 <= it && it < this.cellBeanList.size) {
+                this.cellBeanList[it].isHit = true
             }
         }
     }
@@ -109,15 +86,15 @@ open class PatternIndicatorView @JvmOverloads constructor(context: Context, attr
     private fun drawLinkedLine(canvas: Canvas) {
         if (this.hitIndexList.isNotEmpty()) {
             this.linkedLineView?.draw(canvas,
-                this.hitIndexList,
-                this.cellBeanList,
-                this.isError)
+                    this.hitIndexList,
+                    this.cellBeanList,
+                    this.isError)
         }
     }
 
     private fun drawCells(canvas: Canvas) {
         this.cellBeanList.forEach {
-            if (it.isHit && this.hitCellView != null) {
+            if (it.isHit) {
                 this.hitCellView?.draw(canvas, it, this.isError)
             } else {
                 this.normalCellView?.draw(canvas, it)

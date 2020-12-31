@@ -47,7 +47,7 @@ internal object DefaultConfig {
         return paint
     }
 
-    private fun convertDpToPx(dp: Float, resources: Resources): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
+    private fun convertDpToPx(dpValue: Float, resources: Resources): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, resources.displayMetrics)
     }
 }

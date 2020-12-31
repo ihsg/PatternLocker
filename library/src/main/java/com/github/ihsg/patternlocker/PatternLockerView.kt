@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
+import kotlin.math.abs
 import kotlin.math.min
 
 
@@ -79,7 +80,7 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
     private lateinit var cellBeanList: List<CellBean>
 
     /**
-     * 记录已绘制的cell的id
+     * 记录已绘制cell的id
      */
     private val hitIndexList: MutableList<Int> by lazy {
         mutableListOf<Int>()
@@ -94,7 +95,6 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
         this.initAttrs(context, attrs, defStyleAttr)
         this.initData()
     }
-
 
     fun enableDebug() {
         Logger.enable = true
@@ -118,9 +118,7 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
     fun clearHitState() {
         this.clearHitData()
         this.isError = false
-        if (this.listener != null) {
-            this.listener!!.onClear(this)
-        }
+        this.listener?.onClear(this)
         invalidate()
     }
 
@@ -194,18 +192,18 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
         if (!this::cellBeanList.isInitialized) {
             val w = this.width - this.paddingLeft - this.paddingRight
             val h = this.height - this.paddingTop - this.paddingBottom
-            this.cellBeanList = CellFactory(w, h).cellBeanList
+            this.cellBeanList = CellFactory.buildCells(w, h)
         }
     }
 
     private fun drawLinkedLine(canvas: Canvas) {
         if (this.hitIndexList.isNotEmpty()) {
             this.linkedLineView?.draw(canvas,
-                this.hitIndexList,
-                this.cellBeanList,
-                this.endX,
-                this.endY,
-                this.isError)
+                    this.hitIndexList,
+                    this.cellBeanList,
+                    this.endX,
+                    this.endY,
+                    this.isError)
         }
     }
 
@@ -270,7 +268,15 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
 
     private fun updateHitState(event: MotionEvent) {
         this.cellBeanList.forEach {
-            if (!it.isHit && it.of(event.x, event.y, this.enableSkip)) {
+            if (!it.isHit && it.of(event.x, event.y)) {
+                if (!enableSkip && this.hitIndexList.isNotEmpty()) {
+                    val last = this.cellBeanList[this.hitIndexList.last()]
+                    val mayId = (last.id + it.id) / 2
+                    if (!this.hitIndexList.contains(mayId) && (abs(last.x - it.x) % 2 == 0) && (abs(last.y - it.y) % 2 == 0)) {
+                        this.cellBeanList[mayId].isHit = true
+                        this.hitIndexList.add(mayId)
+                    }
+                }
                 it.isHit = true
                 this.hitIndexList.add(it.id)
                 this.hapticFeedback()
@@ -305,8 +311,8 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
     private fun hapticFeedback() {
         if (this.enableHapticFeedback) {
             this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,
-                HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
-                    or HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+                    HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
+                            or HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
         }
     }
 
