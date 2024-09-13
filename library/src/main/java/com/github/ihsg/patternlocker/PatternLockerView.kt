@@ -14,7 +14,11 @@ import kotlin.math.min
  * Created by hsg on 20/09/2017.
  */
 
-open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+open class PatternLockerView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
     companion object {
         private const val TAG = "PatternLockerView"
     }
@@ -145,14 +149,17 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
                 this.handleActionDown(event)
                 isHandle = true
             }
+
             MotionEvent.ACTION_MOVE -> {
                 this.handleActionMove(event)
                 isHandle = true
             }
+
             MotionEvent.ACTION_UP -> {
                 this.handleActionUp(event)
                 isHandle = true
             }
+
             else -> {
             }
         }
@@ -161,23 +168,46 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
     }
 
     private fun initAttrs(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
-        val ta = context.obtainStyledAttributes(attrs, R.styleable.PatternLockerView, defStyleAttr, 0)
+        val ta =
+            context.obtainStyledAttributes(attrs, R.styleable.PatternLockerView, defStyleAttr, 0)
 
-        val normalColor = ta.getColor(R.styleable.PatternLockerView_plv_color, DefaultConfig.defaultNormalColor)
-        val hitColor = ta.getColor(R.styleable.PatternLockerView_plv_hitColor, DefaultConfig.defaultHitColor)
-        val errorColor = ta.getColor(R.styleable.PatternLockerView_plv_errorColor, DefaultConfig.defaultErrorColor)
-        val fillColor = ta.getColor(R.styleable.PatternLockerView_plv_fillColor, DefaultConfig.defaultFillColor)
-        val lineWidth = ta.getDimension(R.styleable.PatternLockerView_plv_lineWidth, DefaultConfig.getDefaultLineWidth(resources))
+        val normalColor =
+            ta.getColor(R.styleable.PatternLockerView_plv_color, DefaultConfig.defaultNormalColor)
+        val hitColor =
+            ta.getColor(R.styleable.PatternLockerView_plv_hitColor, DefaultConfig.defaultHitColor)
+        val errorColor = ta.getColor(
+            R.styleable.PatternLockerView_plv_errorColor,
+            DefaultConfig.defaultErrorColor
+        )
+        val fillColor =
+            ta.getColor(R.styleable.PatternLockerView_plv_fillColor, DefaultConfig.defaultFillColor)
+        val lineWidth = ta.getDimension(
+            R.styleable.PatternLockerView_plv_lineWidth,
+            DefaultConfig.getDefaultLineWidth(resources)
+        )
 
-        this.freezeDuration = ta.getInteger(R.styleable.PatternLockerView_plv_freezeDuration, DefaultConfig.defaultFreezeDuration)
-        this.enableAutoClean = ta.getBoolean(R.styleable.PatternLockerView_plv_enableAutoClean, DefaultConfig.defaultEnableAutoClean)
-        this.enableHapticFeedback = ta.getBoolean(R.styleable.PatternLockerView_plv_enableHapticFeedback, DefaultConfig.defaultEnableHapticFeedback)
-        this.enableSkip = ta.getBoolean(R.styleable.PatternLockerView_plv_enableSkip, DefaultConfig.defaultEnableSkip)
+        this.freezeDuration = ta.getInteger(
+            R.styleable.PatternLockerView_plv_freezeDuration,
+            DefaultConfig.defaultFreezeDuration
+        )
+        this.enableAutoClean = ta.getBoolean(
+            R.styleable.PatternLockerView_plv_enableAutoClean,
+            DefaultConfig.defaultEnableAutoClean
+        )
+        this.enableHapticFeedback = ta.getBoolean(
+            R.styleable.PatternLockerView_plv_enableHapticFeedback,
+            DefaultConfig.defaultEnableHapticFeedback
+        )
+        this.enableSkip = ta.getBoolean(
+            R.styleable.PatternLockerView_plv_enableSkip,
+            DefaultConfig.defaultEnableSkip
+        )
 
         ta.recycle()
 
         // style
-        val styleDecorator = DefaultStyleDecorator(normalColor, fillColor, hitColor, errorColor, lineWidth)
+        val styleDecorator =
+            DefaultStyleDecorator(normalColor, fillColor, hitColor, errorColor, lineWidth)
         this.normalCellView = DefaultLockerNormalCellView(styleDecorator)
         this.hitCellView = DefaultLockerHitCellView(styleDecorator)
         this.linkedLineView = DefaultLockerLinkedLineView(styleDecorator)
@@ -198,12 +228,14 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
 
     private fun drawLinkedLine(canvas: Canvas) {
         if (this.hitIndexList.isNotEmpty()) {
-            this.linkedLineView?.draw(canvas,
-                    this.hitIndexList,
-                    this.cellBeanList,
-                    this.endX,
-                    this.endY,
-                    this.isError)
+            this.linkedLineView?.draw(
+                canvas,
+                this.hitIndexList,
+                this.cellBeanList,
+                this.endX,
+                this.endY,
+                this.isError
+            )
         }
     }
 
@@ -272,7 +304,10 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
                 if (!enableSkip && this.hitIndexList.isNotEmpty()) {
                     val last = this.cellBeanList[this.hitIndexList.last()]
                     val mayId = (last.id + it.id) / 2
-                    if (!this.hitIndexList.contains(mayId) && (abs(last.x - it.x) % 2 == 0) && (abs(last.y - it.y) % 2 == 0)) {
+                    if (!this.hitIndexList.contains(mayId) && (abs(last.x - it.x) % 2 == 0) && (abs(
+                            last.y - it.y
+                        ) % 2 == 0)
+                    ) {
                         this.cellBeanList[mayId].isHit = true
                         this.hitIndexList.add(mayId)
                     }
@@ -310,15 +345,20 @@ open class PatternLockerView @JvmOverloads constructor(context: Context, attrs: 
 
     private fun hapticFeedback() {
         if (this.enableHapticFeedback) {
-            this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,
-                    HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
-                            or HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            this.performHapticFeedback(
+                HapticFeedbackConstants.VIRTUAL_KEY,
+                HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
+                        or HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+            )
         }
     }
 
     private fun printLogger() {
         if (Logger.enable) {
-            Logger.d(TAG, "cellBeanList = ${this.cellBeanList}, hitIndexList = ${this.hitIndexList}")
+            Logger.d(
+                TAG,
+                "cellBeanList = ${this.cellBeanList}, hitIndexList = ${this.hitIndexList}"
+            )
         }
     }
 }

@@ -4,21 +4,27 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.github.ihsg.demo.R
-import kotlinx.android.synthetic.main.activity_simple_style.*
+import com.github.ihsg.demo.databinding.ActivityWholeStyleBinding
 
 class WholeStyleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_whole_style)
 
-        btnSetting.setOnClickListener { WholePatternSettingActivity.startAction(this@WholeStyleActivity) }
-        btnChecking.setOnClickListener { WholePatternCheckingActivity.startAction(this@WholeStyleActivity) }
+        ActivityWholeStyleBinding.inflate(layoutInflater).apply {
+            setContentView(root)
+
+            btnSetting.setOnClickListener {
+                WholePatternSettingActivity.startAction(this@WholeStyleActivity)
+            }
+
+            btnChecking.setOnClickListener {
+                WholePatternCheckingActivity.startAction(this@WholeStyleActivity)
+            }
+        }
     }
 
     companion object {
-
         fun startAction(context: Context) {
             val intent = Intent(context, WholeStyleActivity::class.java)
             context.startActivity(intent)
