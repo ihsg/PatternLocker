@@ -1,5 +1,5 @@
 [versions]
-minSdk = "15"
+minSdk = "24"
 compileSdk = "34"
 targetSdk = "34"
 versionCode = "21"

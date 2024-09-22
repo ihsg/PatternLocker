@@ -19,14 +19,23 @@ android {
             useSupportLibrary = true
         }
     }
-
+    signingConfigs {
+        create("myConfig") {
+            storeFile = file("keystore.jks")
+            storePassword = "654321"
+            keyAlias = "Pattern"
+            keyPassword = "654321"
+        }
+    }
     buildTypes {
-        release {
+        val signConfig = signingConfigs.getByName("myConfig")
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signConfig
         }
     }
     compileOptions {

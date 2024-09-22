@@ -67,14 +67,14 @@ object SecurityUtil {
             }
             sb.append(tmp)
         }
-        return sb.toString().toUpperCase(Locale.ROOT) // 转成大写
+        return sb.toString().uppercase(Locale.ROOT) // 转成大写
     }
 
     private fun hex2byte(inputString: String): ByteArray {
         if (inputString.length < 2) {
             return ByteArray(0)
         }
-        val str = inputString.toLowerCase(Locale.ROOT)
+        val str = inputString.lowercase(Locale.ROOT)
         val l = inputString.length / 2
         val result = ByteArray(l)
         for (i in 0 until l) {
