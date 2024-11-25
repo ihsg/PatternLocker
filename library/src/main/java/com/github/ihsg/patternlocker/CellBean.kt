@@ -28,13 +28,15 @@ import kotlin.math.sqrt
  * @param radius 表示该cell的半径
  * @param isHit 表示该cell是否被设置的标记
  */
-data class CellBean(val id: Int,
-                    val x: Int,
-                    val y: Int,
-                    val centerX: Float,
-                    val centerY: Float,
-                    val radius: Float,
-                    var isHit: Boolean = false) {
+data class CellBean(
+    val id: Int,
+    val x: Int,
+    val y: Int,
+    val centerX: Float,
+    val centerY: Float,
+    val radius: Float,
+    var isHit: Boolean = false
+) {
     /**
      * 是否触碰到该view
      *

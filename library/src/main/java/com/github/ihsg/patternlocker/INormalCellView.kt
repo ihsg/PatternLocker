@@ -13,5 +13,8 @@ interface INormalCellView {
      * @param canvas
      * @param cellBean the target cell view
      */
-    fun draw(canvas: Canvas, cellBean: CellBean)
+    fun draw(
+        canvas: Canvas,
+        cellBean: CellBean
+    )
 }

@@ -15,8 +15,10 @@ interface IIndicatorLinkedLineView {
      * @param cellBeanList
      * @param isError
      */
-    fun draw(canvas: Canvas,
-             hitIndexList: List<Int>,
-             cellBeanList: List<CellBean>,
-             isError: Boolean)
+    fun draw(
+        canvas: Canvas,
+        hitIndexList: List<Int>,
+        cellBeanList: List<CellBean>,
+        isError: Boolean
+    )
 }

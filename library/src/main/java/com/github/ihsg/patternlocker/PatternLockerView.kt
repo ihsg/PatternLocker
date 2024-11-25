@@ -79,21 +79,25 @@ open class PatternLockerView @JvmOverloads constructor(
     private var hitSize: Int = 0
 
     /**
-     * 真正的cell数组
-     */
-    private lateinit var cellBeanList: List<CellBean>
-
-    /**
      * 记录已绘制cell的id
      */
     private val hitIndexList: MutableList<Int> by lazy {
-        mutableListOf<Int>()
+        mutableListOf()
     }
 
     /**
      * 监听器
      */
     private var listener: OnPatternChangeListener? = null
+
+    /**
+     * 真正的cell数组
+     */
+    private val cellBeanList: List<CellBean> by lazy {
+        val w = this.width - this.paddingLeft - this.paddingRight
+        val h = this.height - this.paddingTop - this.paddingBottom
+        CellFactory.buildCells(w, h)
+    }
 
     init {
         this.initAttrs(context, attrs, defStyleAttr)
@@ -133,7 +137,6 @@ open class PatternLockerView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        this.initCellBeanList()
         this.drawLinkedLine(canvas)
         this.drawCells(canvas)
     }
@@ -216,14 +219,6 @@ open class PatternLockerView @JvmOverloads constructor(
     private fun initData() {
         Logger.enable = DefaultConfig.defaultEnableLogger
         this.hitIndexList.clear()
-    }
-
-    private fun initCellBeanList() {
-        if (!this::cellBeanList.isInitialized) {
-            val w = this.width - this.paddingLeft - this.paddingRight
-            val h = this.height - this.paddingTop - this.paddingBottom
-            this.cellBeanList = CellFactory.buildCells(w, h)
-        }
     }
 
     private fun drawLinkedLine(canvas: Canvas) {

@@ -14,5 +14,9 @@ interface IHitCellView {
      * @param cellBean
      * @param isError
      */
-    fun draw(canvas: Canvas, cellBean: CellBean, isError: Boolean)
+    fun draw(
+        canvas: Canvas,
+        cellBean: CellBean,
+        isError: Boolean
+    )
 }

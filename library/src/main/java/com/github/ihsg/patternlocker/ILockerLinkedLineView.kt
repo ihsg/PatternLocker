@@ -17,10 +17,12 @@ interface ILockerLinkedLineView {
      * @param endY
      * @param isError
      */
-    fun draw(canvas: Canvas,
-             hitIndexList: List<Int>,
-             cellBeanList: List<CellBean>,
-             endX: Float,
-             endY: Float,
-             isError: Boolean)
+    fun draw(
+        canvas: Canvas,
+        hitIndexList: List<Int>,
+        cellBeanList: List<CellBean>,
+        endX: Float,
+        endY: Float,
+        isError: Boolean
+    )
 }
